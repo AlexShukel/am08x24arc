@@ -1,0 +1,1 @@
+.\logisim.jar main.circ

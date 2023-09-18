@@ -1,12 +1,12 @@
 Functions to be implemented:
 
-0000 = ADD
-0001 = ADD with carry
-0010 = SUB
-0011 = SUB with borrow
-0100 = NEG (2's complement)
-0101 = INC (increment)
-0110 = DEC (decrement)
+0000 = ADD <==> A + B
+0001 = ADD with carry <==> A + B + c
+0010 = SUB <==> A - B
+0011 = SUB with borrow <==> A - B - b
+0100 = NEG (2's complement) <==> !A
+0101 = INC (increment) <==> A + 1
+0110 = DEC (decrement) <==> B - 1
 0111 = PAS (pass argument A directly in Out)
 1000 = AND
 1001 = OR
