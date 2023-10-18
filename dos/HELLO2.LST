@@ -1,0 +1,108 @@
+Turbo Assembler	 Version 3.1	    10/11/23 17:09:26	    Page 1
+hello2.ASM
+
+
+
+      1				     ; Turbo Assembler example.	Copyright (c) 1993 By Borland International, Inc.
+      2
+      3				     ; From the	Turbo Assembler	User's Guide - Getting started
+      4
+      5	0000			     .MODEL  SMALL
+      6	0000			     .STACK  100h
+      7	0000			     .DATA
+      8
+      9	0000  49 73 20 69 74 20	61+  TimePrompt		     DB	'Is it after 12	noon (Y/N)?$'
+     10	      66 74 65 72 20 31	32+
+     11	      20 6E 6F 6F 6E 20	28+
+     12	      59 2F 4E 29 3F 24
+     13	001B  0D 0A 47 6F 6F 64	20+  GoodMorningMessage	     DB	 13,10,'Good morning, world!',13,10,'$'
+     14	      6D 6F 72 6E 69 6E	67+
+     15	      2C 20 77 6F 72 6C	64+
+     16	      21 0D 0A 24
+     17	0034  0D 0A 47 6F 6F 64	20+  GoodAfternoonMessage    DB	 13,10,'Good afternoon,	world!',13,10,'$'
+     18	      61 66 74 65 72 6E	6F+
+     19	      6F 6E 2C 20 77 6F	72+
+     20	      6C 64 21 0D 0A 24
+     21	004F  0D 0A 47 6F 6F 64	20+  DefaultMessage	     DB	 13,10,'Good day, world!',10,13,'$'
+     22	      64 61 79 2C 20 77	6F+
+     23	      72 6C 64 21 0A 0D	24
+     24
+     25	0064			     .CODE
+     26	0000			     start:
+     27	0000  B8 0000s		       mov     ax,@data
+     28	0003  8E D8		       mov     ds,ax		       ; set DS	to point to the	data segment
+     29	0005  BA 0000r		       mov     dx,OFFSET TimePrompt    ; point to the time prompt
+     30	0008  B4 09		       mov     ah,9		       ; DOS: print string
+     31	000A  CD 21		       int     21h		       ; display the time prompt
+     32	000C  B4 01		       mov     ah,1		       ; DOS: get character
+     33	000E  CD 21		       int     21h		       ; get a single-character	response
+     34	0010  0C 20		       or      al,20h		       ; force character to lower case
+     35
+     36	0012  3C 79		       cmp     al,'y'		       ;typed Y	for afternoon?
+     37	0014  74 0A		       je      IsAfternoon
+     38	0016  3C 6E		       cmp     al,'n'		       ;typed N	for morning?
+     39	0018  74 0C		       je      IsMorning
+     40
+     41	001A  BA 004Fr		       mov     dx,OFFSET DefaultMessage		   ;default greeting
+     42	001D  EB 0A 90		       jmp     DisplayGreeting
+     43
+     44	0020			     IsAfternoon:
+     45	0020  BA 0034r		       mov     dx,OFFSET GoodAfternoonMessage	   ;afternoon greeting
+     46	0023  EB 04 90		       jmp     DisplayGreeting
+     47
+     48	0026			     IsMorning:
+     49	0026  BA 001Br		       mov     dx,OFFSET GoodMorningMessage	   ;before noon	greeting
+     50
+     51	0029			     DisplayGreeting:
+     52	0029  B4 09		       mov     ah,9		       ;DOS: print string
+     53	002B  CD 21		       int     21h		       ;display	the appropriate	greeting
+     54	002D  B4 4C		       mov     ah,4ch		       ;DOS: terminate program
+     55	002F  B0 00		       mov     al,0		       ;return code will be 0
+     56	0031  CD 21		       int     21h		       ;terminate the program
+     57
+Turbo Assembler	 Version 3.1	    10/11/23 17:09:26	    Page 2
+hello2.ASM
+
+
+
+     58				     END start
+Turbo Assembler	 Version 3.1	    10/11/23 17:09:26	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "10/11/23"
+??FILENAME			  Text	 "hello2  "
+??TIME				  Text	 "17:09:26"
+??VERSION			  Number 030A
+@32BIT				  Text	 0
+@CODE				  Text	 _TEXT
+@CODESIZE			  Text	 0
+@CPU				  Text	 0101H
+@CURSEG				  Text	 _TEXT
+@DATA				  Text	 DGROUP
+@DATASIZE			  Text	 0
+@FILENAME			  Text	 HELLO2
+@INTERFACE			  Text	 00H
+@MODEL				  Text	 2
+@STACK				  Text	 DGROUP
+@WORDSIZE			  Text	 2
+DEFAULTMESSAGE			  Byte	 DGROUP:004F
+DISPLAYGREETING			  Near	 _TEXT:0029
+GOODAFTERNOONMESSAGE		  Byte	 DGROUP:0034
+GOODMORNINGMESSAGE		  Byte	 DGROUP:001B
+ISAFTERNOON			  Near	 _TEXT:0020
+ISMORNING			  Near	 _TEXT:0026
+START				  Near	 _TEXT:0000
+TIMEPROMPT			  Byte	 DGROUP:0000
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+DGROUP				  Group
+  STACK				  16  0100 Para	  Stack	  STACK
+  _DATA				  16  0064 Word	  Public  DATA
+_TEXT				  16  0033 Word	  Public  CODE
+
