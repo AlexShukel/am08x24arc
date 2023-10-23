@@ -1,0 +1,5 @@
+file(GLOB_RECURSE SRC_FILES *.c)
+
+include_directories("./")
+
+add_executable(Compiler ${SRC_FILES})
