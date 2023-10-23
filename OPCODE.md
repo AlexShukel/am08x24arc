@@ -1,12 +1,11 @@
 # OPCODE specification
 
-OPCODE consists of 26 bits. First 16 bits are for operand. Next 6 bits for operation code. Last 4 bits remains for specific needs.
+OPCODE consists of 25 bits. First 16 bits are for operand. Next 6 bits for operation code. Last 4 bits remains for specific needs.
 
 ANY ARG:
-the last 2 bits define how to interpret argument:
-1) 16 bit number    - 00
-2) registry         - 01
-3) memory address   - 10
+the last bit define how to interpret the argument:
+1) 16 bit number  - 0
+2) registry       - 1
 
 <!-- FIXME: MOV is the only operation that uses all last 4 bits. -->
 
