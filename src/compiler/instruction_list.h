@@ -1,0 +1,61 @@
+#pragma once
+
+#include <vector>
+#include <iomanip>
+#include <fstream>
+#include <iostream>
+
+#include "export_format.h"
+#include "instruction.h"
+
+namespace comp {
+    using namespace std;
+
+    class InstructionList {
+        private:
+            vector<Instruction> instructions;
+
+        public:
+            void add(const Instruction& instruction) {
+                instructions.push_back(instruction);
+            }
+
+            void add(const string& name, const Opcode& opcode, const Argument& argument) {
+                instructions.push_back(Instruction{name, opcode, argument});
+            }
+
+            void add(const string& name, const byte& opcode, const word& argument) {
+                instructions.push_back(Instruction{name,{opcode}, {argument}});
+            }
+
+            template<class... Args>
+            void add_all(Args... args) {
+                (instructions.push_back((std::forward<Args>(args))), ...);
+            }
+
+            void export_to_file(const string& fileName, const ExportFormat& format) const {
+                ofstream file(fileName, ios::binary | ios::out);
+
+                if(file.is_open()) {
+                    if(format == BIN) {
+                        for(const auto& i : instructions) {
+                            file.write((char*) &i.opcode, sizeof(Opcode));
+                            file.write((char*) &i.argument, sizeof(Argument));
+                        }
+                    } else if(format == LOGISIM) {
+                        file << "v2.0 raw" << '\n';
+
+                        for(const auto& i : instructions) {
+                            file << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i.opcode.val);
+                            file << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(i.argument.val);
+                            file << " ";
+                        }
+                    }
+
+                    file.close();
+                } else {
+                    cout << "Failed to open file " << fileName << endl;
+                }
+            }
+        };
+}

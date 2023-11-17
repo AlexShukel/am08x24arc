@@ -3,3 +3,4 @@
 .vscode
 .idea
 build
+src/programs/sample1.asm
