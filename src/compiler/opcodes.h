@@ -47,7 +47,7 @@ namespace comp {
     DEFINE_24BIT_INSTRUCTION    (WAIT, 0x40, 0x0000);
     DEFINE_24BIT_INSTRUCTION    (PUSHPC, 0xc4, 0x0000);
 
-    const static InstructionSet DEFAULT_INSTUCTION_SET(
+    const static InstructionSet DEFAULT_INSTRUCTION_SET(
             /* STACK */
             PUSH(0),
             POP(),

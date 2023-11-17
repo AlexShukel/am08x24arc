@@ -1,26 +1,6 @@
 #include "tokenizer.h"
 
 namespace comp {
-    vector<string> Tokenizer::explode(const string& str, const char& ch) {
-        string next;
-        vector<string> result;
-
-        for (string::const_iterator it = str.begin(); it != str.end(); it++) {
-            if (*it == ch) {
-                if (!next.empty()) {
-                    result.push_back(next);
-                    next.clear();
-                }
-            } else
-                next += *it;
-        }
-
-        if (!next.empty())
-            result.push_back(next);
-
-        return result;
-    }
-
     string Tokenizer::to_upper_case(string str) {
         std::transform(str.begin(), str.end(), str.begin(), [](auto& c){
             return std::toupper(c);
@@ -99,7 +79,7 @@ namespace comp {
     InstructionList Tokenizer::tokenize(const InstructionSet& instuctions, const string& text) {
         InstructionList list;
 
-        const auto tokens = explode(text, ' ');
+        const auto tokens = explode(text, set{' ', '\t', '\n'});
 
         for(auto it = tokens.begin(); it != tokens.end();) {
             auto keyword = *it;
