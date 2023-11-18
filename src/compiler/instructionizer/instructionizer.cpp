@@ -3,6 +3,7 @@
 namespace comp {
     vector<Token> Instructionizer::register_labels(vector<Token> tokens) {
         word instructions = 0;
+
         for(auto it = tokens.begin(); it != tokens.end();) {
             auto token = *it;
             const auto tokenType = token.get_type();
@@ -14,6 +15,9 @@ namespace comp {
                     ++it;
 
                 ++instructions;
+
+                if(it == tokens.end())
+                    break;
             } else if(tokenType == LABEL_START) {
                 it = tokens.erase(it);
 
@@ -27,6 +31,9 @@ namespace comp {
                     throw runtime_error("Label " + label + " is already defined");
 
                 labels.insert({label, instructions});
+
+                if(it == tokens.end())
+                    break;
             }
 
             ++it;
@@ -54,11 +61,11 @@ namespace comp {
             if(tokenType == WORD) {
                 auto instruction = instuctions.find(to_upper_case(token.get_value()));
 
-                if(!instruction.is_24bit_instruction()) {
+                if(!instruction.is_24bit_instruction() && !instruction.is_halt()) {
                     ++it;
 
                     if(it == tokens.end())
-                        throw std::runtime_error("Expected keyword argument after " + token.get_value() + "keyword");
+                        throw std::runtime_error("Expected keyword argument after " + token.get_value() + " keyword");
 
                     auto argumentToken = *it;
                     auto argumentType = argumentToken.get_type();

@@ -19,6 +19,7 @@ namespace comp {
             static pair<string, vector<string>> extract_args_from_index(const string& text, size_t index);
 
             void add_macro(const Macro& macro);
+            void declare_default_macros();
 
             pair<string, bool> comment_pass(string text) const;
             pair<string, bool> macro_pass(const string& text);

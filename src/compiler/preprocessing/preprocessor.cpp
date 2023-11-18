@@ -155,4 +155,34 @@ namespace comp {
 
         return make_pair(text, false);
     }
+
+    void Preprocessor::declare_default_macros() {
+        add_macro(
+            Macro(
+                "@NOTIFY",
+                "",
+                {"@ARG1"},
+                [&](auto& macro, auto& args, auto& preprocessor) {
+                    for(auto arg : args)
+                        cout << arg;
+
+                    cout << endl;
+
+                    return true;
+                }
+            ));
+
+        add_macro(
+            Macro{
+                "@MACRO",
+                "",
+                {"@ARG1", "@ARG2", "@ARG3"},
+                [](auto& macro, auto& args, auto& pp) {
+                    auto argResult = Preprocessor::extract_args_from_index(args[1], 0);
+                    pp.add_macro(Macro( args[0], args[2], argResult.second));
+
+                    return true;
+                }
+            });
+    }
 }
