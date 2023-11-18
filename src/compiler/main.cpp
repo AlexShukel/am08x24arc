@@ -1,5 +1,7 @@
 #include "opcodes.h"
-#include "tokenizer.h"
+#include "instructionizer.h"
+
+#include "tokenizer/tokenizer.h"
 #include "preprocessing/preprocessor.h"
 
 using namespace comp;
@@ -20,7 +22,7 @@ void save_file(const string& path, const string& text) {
 int main() {
     InstructionList list;
 
-    auto assemblyCode = read_file("src/programs/example0.asm");
+    auto assemblyCode = read_file("src/programs/example1.asm");
 
     try {
         Preprocessor preprocessor;
@@ -68,16 +70,15 @@ int main() {
         }
         save_file("src/programs/sample1.o1", assemblyCode);
 
-        auto labelResult = preprocessor.label_pass(assemblyCode);
-        while(labelResult.second) {
-            assemblyCode = labelResult.first;
-            labelResult = preprocessor.label_pass(assemblyCode);
-        }
-        save_file("src/programs/sample1.o2", assemblyCode);
-
         Tokenizer tokenizer;
+        auto tokens = tokenizer.tokenize(assemblyCode);
 
-        list = tokenizer.tokenize(DEFAULT_INSTRUCTION_SET, assemblyCode);
+        Instructionizer instructionizer(DEFAULT_INSTRUCTION_SET);
+
+        list = instructionizer.tokenize(tokens);
+
+        instructionizer.clear_labels();
+
     } catch(exception& ex) {
         cout << ex.what();
     }

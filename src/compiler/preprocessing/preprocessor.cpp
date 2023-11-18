@@ -155,16 +155,4 @@ namespace comp {
 
         return make_pair(text, false);
     }
-
-    pair<string, bool> Preprocessor::label_pass(string text) const {
-        bool madeChanges = false;
-
-
-
-
-
-
-
-        return make_pair(text, madeChanges);
-    }
 }

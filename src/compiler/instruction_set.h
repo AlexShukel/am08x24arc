@@ -33,10 +33,8 @@ namespace comp {
                     return inst.keyword == keyword;
                 });
 
-                if(res == instructions.end()) {
-                    const auto message = "Could not find instruction '" + keyword + "'";
-                    throw std::exception(message.c_str());
-                }
+                if(res == instructions.end())
+                    throw runtime_error("Could not find instruction '" + keyword + "'");
 
                 return *res;
             }

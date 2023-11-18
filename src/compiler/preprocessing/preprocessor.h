@@ -22,6 +22,5 @@ namespace comp {
 
             pair<string, bool> comment_pass(string text) const;
             pair<string, bool> macro_pass(const string& text);
-            pair<string, bool> label_pass(string text) const;
     };
 }
