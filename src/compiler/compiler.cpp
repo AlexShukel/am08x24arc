@@ -5,6 +5,7 @@ namespace comp {
         Preprocessor preprocessor;
 
         preprocessor.declare_default_macros();
+        preprocessor.declare_default_scopes();
 
         // We do comment pass until no comments left
         auto commentResult = preprocessor.comment_pass(rawCode);
@@ -65,12 +66,18 @@ namespace comp {
             code += fileContent;
         }
 
-        auto preProcessorResult = run_preprocessor(code);
+        try {
+            auto preProcessorResult = run_preprocessor(code);
 
-        auto tokens = run_tokenizer(preProcessorResult);
+            auto tokens = run_tokenizer(preProcessorResult);
 
-        auto instructions = run_compiler(tokens);
+            auto instructions = run_compiler(tokens);
 
-        return instructions;
+            return instructions;
+        } catch(const exception& ex) {
+            cout << ex.what();
+        }
+
+        return {};
     }
 }

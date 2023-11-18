@@ -5,14 +5,14 @@ int main() {
     using namespace std;
 
     vector<string> sources = {
-        "src/programs/example1.asm"
+        "src/programs/example0.asm"
     };
 
     Compiler compiler(sources);
 
     auto result = compiler.compile();
 
-    result.export_to_file("src/programs/sample1.txt", LOGISIM);
+    result.export_to_file("src/programs/sample0.txt", LOGISIM);
 
     return 0;
 }
