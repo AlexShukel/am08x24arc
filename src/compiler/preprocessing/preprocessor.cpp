@@ -2,11 +2,10 @@
 
 namespace comp {
     void Preprocessor::add_macro(const Macro& macro) {
-        for(auto& m : macros)
-            if(m.label == macro.label)
-                throw runtime_error("Could not add macro with '" + macro.label + "' label, this label is already defined");
+        if(is_macro_label_defined(macro.get_label()))
+            throw runtime_error("Could not add macro with '" + macro.get_label() + "' label, this label is already defined");
 
-        macros.push_back(macro);
+        macros.push_back(make_shared<Macro>(macro));
     }
 
     vector<Scope> Preprocessor::get_default_scopes() {
@@ -19,7 +18,13 @@ namespace comp {
         };
     }
 
-    string Preprocessor::replace_sub_str(string str,const string &subStr,const string &replacement) {
+    string Preprocessor::replace_sub_str(string str, const size_t& begin, const size_t& len, const string &replacement) {
+        str.replace(begin, len, replacement);
+
+        return str;
+    }
+
+    string Preprocessor::replace_sub_strs(string str,const string &subStr,const string &replacement) {
         size_t pos = str.find(subStr);
 
         while (pos != std::string::npos) {
@@ -164,13 +169,11 @@ namespace comp {
             if(c == '#' && startIndex == -1)
                 startIndex = index;
 
-            if(c == '\n' && endIndex == -1 && startIndex != -1) {
+            if(c == '\n' && endIndex == -1 && startIndex != -1)
                 endIndex = index;
-            }
 
-            if(startIndex != -1 && endIndex != -1) {
+            if(startIndex != -1 && endIndex != -1)
                 break;
-            }
 
             ++index;
 
@@ -194,129 +197,83 @@ namespace comp {
         return make_pair(text, madeChanges);
     }
 
+    string Preprocessor::expand_macros(string text) {
+        auto passResult = macro_pass(text);
+        while(passResult.second) {
+            text = passResult.first;
+            passResult = macro_pass(text);
+        }
+
+        return text;
+    }
+
+    string Preprocessor::continue_macro_pass_zero_args(const string& text, shared_ptr<Macro>& macro) {
+        vector<string> args;
+
+        macro->pre_comp_time_process(*this, args);
+
+        string newText = regex_replace(text, std::regex(macro->get_label()), macro->paste_args({}));
+
+        if(newText != text)
+            macro->comp_time_process(*this, args);
+
+        return newText;
+    }
+
+    string Preprocessor::continue_macro_pass_multy_args(const string& text, shared_ptr<Macro>& macro) {
+        size_t index = text.find(macro->get_label(), 0);
+
+        if(index == std::string::npos)
+            return text;
+
+        auto result = extract_args_from_index(text, index);
+
+        string& macroString = result.first;
+        vector<string> arguments = result.second;
+
+        // Note that we do not do that
+        // for(auto& arg : arguments) {
+        //     arg = expand_macros(arg);
+        // }
+
+        macro->pre_comp_time_process(*this, arguments);
+
+        string newText = replace_sub_str(text, index, macroString.size(), macro->paste_args(arguments));
+
+        if(newText != text)
+            macro->comp_time_process(*this, arguments);
+
+        return newText;
+    }
+
     pair<string, bool> Preprocessor::macro_pass(const string& text) {
         for(auto i = 0; i < macros.size(); ++i) {
             auto macro = macros[i];
 
-            size_t argCount = macro.argsLabels.size();
-            vector<string> arguments;
-
             string newText = text;
 
-            if(argCount == 0) {
-                macro.preCompTimeProcess(macro, arguments, *this);
+            if(macro->is_zero_arg_macro())
+                newText = continue_macro_pass_zero_args(newText, macro);
+            else
+                newText = continue_macro_pass_multy_args(newText, macro);
 
-                newText = regex_replace(newText, std::regex(macro.label), macro.paste_args({}));
-            } else {
-                size_t index = newText.find(macro.label, 0);
-
-                if(index == std::string::npos)
-                    continue;
-
-                auto result = extract_args_from_index(newText, index);
-
-                string& macroString = result.first;
-                arguments = result.second;
-
-                macro.preCompTimeProcess(macro, arguments, *this);
-
-                newText = replace_sub_str(newText, macroString, macro.paste_args(arguments));
-            }
-
-            if(newText != text) {
-                macro.compTimeProcess(macro, arguments, *this);
-
+            if(newText != text)
                 return make_pair(newText, true);
-            }
         }
 
         return make_pair(text, false);
     }
 
     void Preprocessor::declare_default_macros() {
-        add_macro(
-            Macro(
-                "@INCLUDE",
-                "",
-                {"@ARG1"},
-                [](auto& macro, auto& args, Preprocessor& pp) {
-                    try {
-                        string fileName = pp.extract_arg_substring(args[0], 0).second;
-
-                        cout << "Trying to include file: " << fileName << "\n";
-                    } catch (const exception& ex) {
-                        throw runtime_error("Failed to parse file name in @INCLUDE macro, something wrong with macro arguments");
-                    }
-
-                    return true;
-                }
-            ));
-
-        add_macro(
-            Macro(
-                "@MACRO",
-                "",
-                {"@ARG1", "@ARG2", "@ARG3"},
-                [](auto& macro, auto& args, auto& pp) {
-                    auto argResult = pp.extract_args_from_index(args[1], 0);
-                    pp.add_macro(Macro(args[0], args[2], argResult.second));
-
-                    return true;
-                }
-            ));
-
-        add_macro(
-            Macro(
-                "@NOTIFY",
-                "",
-                {"@ARG1"},
-                [&](auto& macro, auto& args, auto& pp) {
-                    try {
-                        cout << pp.extract_arg_substring(args[0], 0).second << "\n";
-                    } catch (const exception& ex) {
-                        throw runtime_error("Failed to print @NOTIFY macro message, something wrong with argument");
-                    }
-
-                    return true;
-                }
-            ));
-
-        add_macro(
-            Macro(
-                "@IF_DEF",
-                "",
-                {"@ARG1", "@ARG2"},
-                [](auto& macro, auto& args, auto& pp) {
-                    return true;
-                },
-                [](auto& macro, auto& args, auto& pp) {
-                    if(pp.is_macro_label_defined(args[0]))
-                        macro.body = args[1];
-
-                    return true;
-                }
-            ));
-
-        add_macro(
-            Macro(
-                "@IF_NOT_DEF",
-                "",
-                {"@ARG1", "@ARG2"},
-                [](auto& macro, auto& args, auto& pp) {
-                    return true;
-                },
-                [](auto& macro, auto& args, auto& pp) {
-                    if(!pp.is_macro_label_defined(args[0]))
-                        macro.body = args[1];
-
-                    return true;
-                }
-            ));
+        add_macro<IncludeMacro>();
+        add_macro<IfNotDefMacro>();
+        add_macro<MacroMacro>();
+        add_macro<NotifyMacro>();
     }
 
     bool Preprocessor::is_macro_label_defined(const string& label) const {
         for(const auto& macro : macros)
-            if(macro.label == label)
+            if(macro->get_label() == label)
                 return true;
 
         return false;

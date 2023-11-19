@@ -5,7 +5,7 @@ int main() {
     using namespace std;
 
     vector<string> sources = {
-        "src/programs/example1.asm"
+        "assembly/examples/include_file.asm"
     };
 
     CompilerFlags flags = {
@@ -20,7 +20,7 @@ int main() {
 
     auto result = compiler.compile();
 
-    result.export_to_file("src/programs/example1.txt", LOGISIM);
+    result.export_to_file("assembly/examples/include_file.txt", LOGISIM);
 
     return 0;
 }

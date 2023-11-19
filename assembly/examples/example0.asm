@@ -1,5 +1,3 @@
-@MACRO(@MAX16BIT, (), 0xffff)
-
 # Hey we support simple comments
 # comment can be wrote using '#' character
 # all characters after this symbol until new line

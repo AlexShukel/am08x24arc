@@ -7,9 +7,9 @@ jmpa $MAIN
 @NOTIFY{"You can use \{ macroscopes \} like this"}
 @NOTIFY("This is a, simple macro")
 
-@CODE{
+@CODE {
 $MAIN:
-    push 0xfff
+    push 0xffff
     pop
 
     $LABEL:
