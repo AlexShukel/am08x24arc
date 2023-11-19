@@ -2,16 +2,10 @@
 
 #include <string>
 
+#include "token_type.h"
+
 namespace comp {
     using namespace std;
-
-    enum TokenType {
-        NUMERIC,
-        WORD,
-
-        LABEL,
-        LABEL_START,
-    };
 
     class Token {
         private:
@@ -19,27 +13,10 @@ namespace comp {
             string value;
 
         public:
-            Token(const string& value, const TokenType& type)
-                : value(value),
-                  type(type) {
+            Token(const string& value, const TokenType& type);
 
-            }
-
-            const TokenType& get_type() const {
-                return type;
-            }
-
-            string get_type_str() const {
-                switch (type) {
-                    case NUMERIC: { return "NUMERIC"; };
-                    case LABEL: { return "LABEL"; };
-                    case LABEL_START: { return "LABEL_START"; };
-                    case WORD: { return "WORD"; };
-                }
-            }
-
-            const string& get_value() const {
-                return value;
-            }
+            const TokenType& get_type() const;
+            string get_type_str() const;
+            const string& get_value() const;
     };
 }

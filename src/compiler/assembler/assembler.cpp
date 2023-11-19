@@ -1,7 +1,12 @@
-#include "instructionizer.h"
+#include "assembler.h"
 
 namespace comp {
-    vector<Token> Instructionizer::register_labels(vector<Token> tokens) {
+    Assembler::Assembler(const InstructionSet& instuctions)
+            : instuctions(instuctions) {
+
+    }
+
+    vector<Token> Assembler::register_labels(vector<Token> tokens) {
         word instructions = 0;
 
         for(auto it = tokens.begin(); it != tokens.end();) {
@@ -42,14 +47,14 @@ namespace comp {
         return tokens;
     }
 
-    word Instructionizer::get_label_value(string label) const {
+    word Assembler::get_label_value(string label) const {
         if(!labels.contains(label))
             throw runtime_error("Not defined label " + label);
 
         return labels.at(label);
     }
 
-    InstructionList Instructionizer::tokenize(vector<Token> tokens) {
+    InstructionList Assembler::tokenize(vector<Token> tokens) {
         InstructionList list;
 
         tokens = register_labels(tokens);
@@ -95,7 +100,7 @@ namespace comp {
         return list;
     }
 
-    void Instructionizer::clear_labels() {
+    void Assembler::clear_labels() {
         labels.clear();
     }
 }

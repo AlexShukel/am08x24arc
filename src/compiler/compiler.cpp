@@ -1,7 +1,7 @@
 #include "compiler.h"
 
 namespace comp {
-    string Compiler::run_preprocessor(string rawCode) {
+    PreprocessorResult Compiler::run_preprocessor(string rawCode) {
         Preprocessor preprocessor;
 
         preprocessor.declare_default_macros();
@@ -14,31 +14,32 @@ namespace comp {
             commentResult = preprocessor.comment_pass(rawCode);
         }
 
+        // We do macro pass until no macros left
         auto macroResult = preprocessor.macro_pass(rawCode);
         while(macroResult.second) {
             rawCode = macroResult.first;
             macroResult = preprocessor.macro_pass(rawCode);
         }
 
-        return rawCode;
+        return {rawCode};
     }
 
-    vector<Token> Compiler::run_tokenizer(const string& rawCode) {
+    TokenizerResult Compiler::run_tokenizer(const string& rawCode) {
         Tokenizer tokenizer;
 
         auto tokens = tokenizer.tokenize(rawCode);
 
-        return tokens;
+        return {tokens};
     }
 
-    InstructionList Compiler::run_compiler(const vector<Token>& tokens) {
-        Instructionizer inst(DEFAULT_INSTRUCTION_SET);
+    AssemblerResult Compiler::run_assembler(const vector<Token>& tokens) {
+        Assembler inst(DEFAULT_INSTRUCTION_SET);
 
         auto list = inst.tokenize(tokens);
 
         inst.clear_labels();
 
-        return list;
+        return {list};
     }
 
     string Compiler::read_file(const string& path) {
@@ -48,8 +49,9 @@ namespace comp {
         return ss.str();
     }
 
-    Compiler::Compiler(const vector<string>& sourcePaths)
-            : sourcePaths(sourcePaths) {
+    Compiler::Compiler(const vector<string>& sourcePaths, const CompilerFlags& flags)
+            : sourcePaths(sourcePaths),
+              flags(flags) {
 
     }
 
@@ -60,7 +62,7 @@ namespace comp {
     InstructionList Compiler::compile() {
         string code;
 
-        for(auto filePath : sourcePaths) {
+        for(const auto& filePath : sourcePaths) {
             auto fileContent = read_file(filePath);
 
             code += fileContent;
@@ -69,11 +71,11 @@ namespace comp {
         try {
             auto preProcessorResult = run_preprocessor(code);
 
-            auto tokens = run_tokenizer(preProcessorResult);
+            auto tokenizerResult = run_tokenizer(preProcessorResult.sourceCode);
 
-            auto instructions = run_compiler(tokens);
+            auto assemblerResult = run_assembler(tokenizerResult.tokens);
 
-            return instructions;
+            return assemblerResult.instructions;
         } catch(const exception& ex) {
             cout << ex.what();
         }

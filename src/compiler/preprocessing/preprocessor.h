@@ -6,10 +6,14 @@
 #include "macro.h"
 #include "scope.h"
 
-#include "../text_processor.h"
+#include "common/text_processor.h"
 
 namespace comp {
     using namespace std;
+
+    struct PreprocessorResult {
+        string sourceCode;
+    };
 
     class Preprocessor : public TextProcessor {
         private:
@@ -28,6 +32,7 @@ namespace comp {
             pair<int, string> extract_arg_substring(const string& text, size_t index) const;
 
             void add_macro(const Macro& macro);
+            bool is_macro_label_defined(const string& label) const;
 
             void declare_default_macros();
             void declare_default_scopes();

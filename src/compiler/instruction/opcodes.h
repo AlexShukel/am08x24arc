@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "common/types.h"
 #include "instruction.h"
 
 #include "instruction_set.h"

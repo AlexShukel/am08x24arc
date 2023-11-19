@@ -14,10 +14,6 @@ namespace comp {
             set<Instruction> instructions;
 
         public:
-            InstructionSet() {
-
-            }
-
             template<class... Args>
             InstructionSet(Args... args) {
                 (instructions.insert((std::forward<Args>(args))), ...);
@@ -28,15 +24,6 @@ namespace comp {
                 (instructions.insert((std::forward<Args>(args))), ...);
             }
 
-            Instruction find(const string& keyword) const {
-                auto res = std::find_if(instructions.begin(), instructions.end(), [&](const Instruction& inst) {
-                    return inst.keyword == keyword;
-                });
-
-                if(res == instructions.end())
-                    throw runtime_error("Could not find instruction '" + keyword + "'");
-
-                return *res;
-            }
+            Instruction find(const string& keyword) const;
         };
 }

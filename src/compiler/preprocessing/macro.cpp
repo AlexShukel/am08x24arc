@@ -1,6 +1,50 @@
 #include "macro.h"
 
+#include "preprocessor.h"
+
 namespace comp {
+    Macro::Macro(const string& label, const CompileTimeProcess& compTimeProcess)
+            : label(label),
+              argsLabels({}),
+              compTimeProcess(compTimeProcess),
+              preCompTimeProcess([](auto&, auto&, auto&) { return false; }) {
+
+    }
+
+    Macro::Macro(const string& label, const string& body)
+            : label(label),
+              body(body),
+              argsLabels({}),
+              compTimeProcess([](auto&, auto&, auto&) { return false; }),
+              preCompTimeProcess([](auto&, auto&, auto&) { return false; }) {
+
+    }
+
+    Macro::Macro(const string& label, const string& body, const vector<string>& argsLabels)
+            : label(label),
+              body(body),
+              argsLabels(argsLabels),
+              compTimeProcess([](auto&, auto&, auto&) { return false; }),
+              preCompTimeProcess([](auto&, auto&, auto&) { return false; }) {
+
+    }
+
+    Macro::Macro(const string& label, const string& body, const vector<string>& argsLabels, const CompileTimeProcess& compTimeProcess)
+            : label(label),
+              body(body),
+              argsLabels(argsLabels),
+              compTimeProcess(compTimeProcess),
+              preCompTimeProcess([](auto&, auto&, auto&) { return false; }) {
+    }
+
+    Macro::Macro(const string& label, const string& body, const vector<string>& argsLabels, const CompileTimeProcess& compTimeProcess, const CompileTimeProcess& preCompTimeProcess)
+            : label(label),
+              body(body),
+              argsLabels(argsLabels),
+              compTimeProcess(compTimeProcess),
+              preCompTimeProcess(preCompTimeProcess) {
+    }
+
     string Macro::paste_args(const vector<string>& args) const {
         if(argsLabels.size() == 0)
             return body;

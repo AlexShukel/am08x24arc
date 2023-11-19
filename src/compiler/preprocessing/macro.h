@@ -20,38 +20,13 @@ namespace comp {
 
         vector<string> argsLabels;
         CompileTimeProcess compTimeProcess;
+        CompileTimeProcess preCompTimeProcess;
 
-        Macro(const string& label, const CompileTimeProcess& compTimeProcess)
-                : label(label),
-                  body(""),
-                  argsLabels({}),
-                  compTimeProcess(compTimeProcess) {
-
-        }
-
-        Macro(const string& label, const string& body)
-                : label(label),
-                  body(body),
-                  argsLabels({}),
-                  compTimeProcess([](auto&, auto&, auto&) { return false; }){
-
-        }
-
-        Macro(const string& label, const string& body, const vector<string>& argsLabels)
-            : label(label),
-              body(body),
-              argsLabels(argsLabels),
-              compTimeProcess([](auto&, auto&, auto&) { return false; }){
-
-        }
-
-        Macro(const string& label, const string& body, const vector<string>& argsLabels, const CompileTimeProcess& compTimeProcess)
-                : label(label),
-                  body(body),
-                  argsLabels(argsLabels),
-                  compTimeProcess(compTimeProcess) {
-
-        }
+        Macro(const string& label, const CompileTimeProcess& compTimeProcess);
+        Macro(const string& label, const string& body);
+        Macro(const string& label, const string& body, const vector<string>& argsLabels);
+        Macro(const string& label, const string& body, const vector<string>& argsLabels, const CompileTimeProcess& compTimeProcess);
+        Macro(const string& label, const string& body, const vector<string>& argsLabels, const CompileTimeProcess& compTimeProcess, const CompileTimeProcess& preCompTimeProcess);
 
         string paste_args(const vector<string>& args) const;
     };

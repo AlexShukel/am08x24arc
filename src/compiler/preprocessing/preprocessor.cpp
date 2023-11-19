@@ -19,7 +19,6 @@ namespace comp {
         };
     }
 
-
     string Preprocessor::replace_sub_str(string str,const string &subStr,const string &replacement) {
         size_t pos = str.find(subStr);
 
@@ -40,8 +39,6 @@ namespace comp {
     }
 
     pair<int, string> Preprocessor::extract_arg_substring(const string& text, size_t index) const {
-        auto startIndex = index;
-
         unordered_map<Scope, int> argScopes;
         for(const auto& scope : get_default_scopes())
             argScopes[scope] = 0;
@@ -207,6 +204,8 @@ namespace comp {
             string newText = text;
 
             if(argCount == 0) {
+                macro.preCompTimeProcess(macro, arguments, *this);
+
                 newText = regex_replace(newText, std::regex(macro.label), macro.paste_args({}));
             } else {
                 size_t index = newText.find(macro.label, 0);
@@ -218,6 +217,8 @@ namespace comp {
 
                 string& macroString = result.first;
                 arguments = result.second;
+
+                macro.preCompTimeProcess(macro, arguments, *this);
 
                 newText = replace_sub_str(newText, macroString, macro.paste_args(arguments));
             }
@@ -234,7 +235,7 @@ namespace comp {
 
     void Preprocessor::declare_default_macros() {
         add_macro(
-            Macro{
+            Macro(
                 "@INCLUDE",
                 "",
                 {"@ARG1"},
@@ -249,10 +250,10 @@ namespace comp {
 
                     return true;
                 }
-            });
+            ));
 
         add_macro(
-            Macro{
+            Macro(
                 "@MACRO",
                 "",
                 {"@ARG1", "@ARG2", "@ARG3"},
@@ -262,7 +263,7 @@ namespace comp {
 
                     return true;
                 }
-            });
+            ));
 
         add_macro(
             Macro(
@@ -279,6 +280,46 @@ namespace comp {
                     return true;
                 }
             ));
+
+        add_macro(
+            Macro(
+                "@IF_DEF",
+                "",
+                {"@ARG1", "@ARG2"},
+                [](auto& macro, auto& args, auto& pp) {
+                    return true;
+                },
+                [](auto& macro, auto& args, auto& pp) {
+                    if(pp.is_macro_label_defined(args[0]))
+                        macro.body = args[1];
+
+                    return true;
+                }
+            ));
+
+        add_macro(
+            Macro(
+                "@IF_NOT_DEF",
+                "",
+                {"@ARG1", "@ARG2"},
+                [](auto& macro, auto& args, auto& pp) {
+                    return true;
+                },
+                [](auto& macro, auto& args, auto& pp) {
+                    if(!pp.is_macro_label_defined(args[0]))
+                        macro.body = args[1];
+
+                    return true;
+                }
+            ));
+    }
+
+    bool Preprocessor::is_macro_label_defined(const string& label) const {
+        for(const auto& macro : macros)
+            if(macro.label == label)
+                return true;
+
+        return false;
     }
 
     pair<bool, Scope> Preprocessor::is_begin_scope(const byte& ch) const {

@@ -6,26 +6,27 @@
 #include <bitset>
 #include <unordered_map>
 
-#include "text_processor.h"
+#include "common/text_processor.h"
 
-#include "instruction_list.h"
-#include "instruction_set.h"
-#include "number_formats.h"
+#include "instruction/instruction_list.h"
+#include "instruction/instruction_set.h"
+#include "common/number_formats.h"
 #include "tokenizer/token.h"
 
 namespace comp {
     using namespace std;
 
-    class Instructionizer : public TextProcessor {
+    struct AssemblerResult {
+        InstructionList instructions;
+    };
+
+    class Assembler : public TextProcessor {
         private:
             InstructionSet instuctions;
             unordered_map<string, word> labels;
 
         public:
-            Instructionizer(const InstructionSet& instuctions)
-                : instuctions(instuctions) {
-
-            }
+            Assembler(const InstructionSet& instuctions);
 
             InstructionList tokenize(vector<Token> tokens);
 

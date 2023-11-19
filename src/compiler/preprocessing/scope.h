@@ -2,18 +2,16 @@
 
 #include <unordered_map>
 
-#include "../types.h"
-
-using namespace std;
+#include "common/types.h"
 
 namespace comp {
+    using namespace std;
+
     struct Scope {
         byte beginChar;
         byte endChar;
 
-        bool operator==(const Scope& another) const {
-            return (beginChar == another.beginChar) && (endChar == another.endChar);
-        }
+        bool operator==(const Scope& another) const;
     };
 
     struct ScopeCheckResult {
