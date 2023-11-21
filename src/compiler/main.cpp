@@ -5,7 +5,7 @@ int main() {
     using namespace std;
 
     vector<string> sources = {
-        "assembly/examples/include_file.asm"
+        "assembly/examples/fibonacci.asm"
     };
 
     CompilerFlags flags = {
@@ -20,7 +20,7 @@ int main() {
 
     auto result = compiler.compile();
 
-    result.export_to_file("assembly/examples/include_file.txt", LOGISIM);
+    result.export_to_file("assembly/examples/fibonacci.txt", LOGISIM);
 
     return 0;
 }
