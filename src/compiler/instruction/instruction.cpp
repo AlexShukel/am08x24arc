@@ -2,7 +2,7 @@
 
 namespace comp {
     bool Instruction::is_24bit_instruction() const {
-        return (opcode.val & 0b01000000) != 0;
+        return (opcode.val & 0b10000000) != 0;
     }
 
     bool Instruction::is_halt() const {
