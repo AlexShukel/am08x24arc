@@ -36,7 +36,6 @@ namespace comp {
             string continue_macro_pass_zero_args(const string& text, shared_ptr<Macro>& macro);
             string continue_macro_pass_multy_args(const string& text, shared_ptr<Macro>& macro);
 
-
         public:
             string expand_macros(string text);
             pair<string, vector<string>> extract_args_from_index(const string& text, size_t index) const;
