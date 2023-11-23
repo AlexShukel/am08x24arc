@@ -9,6 +9,13 @@ jmpa $MAIN
     @POP2
 )
 
+@MACRO(@CLEAR_DISPLAY, (),
+    push 0xffff
+    push 0
+    store
+    @POP2
+)
+
 @MACRO(@DISPLAY_LINE, (@LINE, @PIXELS),
     push @PIXELS
     push @LINE
@@ -42,5 +49,9 @@ device 4
 @PRINT_C('h')
 @PRINT_C('u')
 @PRINT_C('j')
+
+@CLEAR_DISPLAY
+
+jmpa $MAIN
 
 halt
