@@ -13,17 +13,16 @@ namespace comp {
             auto token = *it;
             const auto tokenType = token.get_type();
 
-            if(tokenType == WORD) {
-                auto instruction = instuctions.find(to_upper_case(token.get_value()));
+            if(tokenType != LABEL_START) {
+                try {
+                    auto instruction = instuctions.find(to_upper_case(token.get_value()));
+                    ++instructions;
+                } catch(exception ex) {
 
-                if(!instruction.is_24bit_instruction())
-                    ++it;
+                }
 
-                ++instructions;
-
-                if(it == tokens.end())
-                    break;
-            } else if(tokenType == LABEL_START) {
+                ++it;
+            } else {
                 it = tokens.erase(it);
 
                 string label = token.get_value();
@@ -40,8 +39,6 @@ namespace comp {
                 if(it == tokens.end())
                     break;
             }
-
-            ++it;
         }
 
         return tokens;

@@ -25,7 +25,7 @@ jmpa $MAIN
 
 $MAIN:
 
-device 4
+device 2
 
 @PRINT_C('h')
 @PRINT_C('e')

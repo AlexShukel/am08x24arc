@@ -24,6 +24,7 @@ jmpa $MAIN
 )
 
 @MACRO(@ROTATE_TOP, (),
+    device 0
     @STORE_TOP_AT(0xfff0)
     pop
 
@@ -45,6 +46,11 @@ $MAIN:
         dup
         @ROTATE_TOP
         @ADD
+
+        device 3
+        push 0
+        store
+        pop
 
        jmpa 3
 

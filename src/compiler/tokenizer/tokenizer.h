@@ -21,5 +21,7 @@ namespace comp {
 
         public:
             vector<Token> tokenize(const string& text) const;
+
+            static void save_to_file(const vector<Token>& token, const string& fileName);
     };
 }
