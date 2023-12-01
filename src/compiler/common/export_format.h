@@ -5,6 +5,7 @@
 namespace comp {
     enum ExportFormat {
         BIN,
-        LOGISIM
+        LOGISIM,
+        ASSEMBLY
     };
 }

@@ -23,13 +23,40 @@ namespace comp {
                     file.write((char*) &i.argument, sizeof(Argument));
                 }
             } else if(format == LOGISIM) {
-                file << "v2.0 raw" << '\n';
+                file << "v2.0 raw" << endl;
 
                 for(const auto& i : instructions) {
                     file << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i.opcode.val);
                     file << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(i.argument.val);
                     file << " ";
                 }
+            } else if(format == ASSEMBLY) {
+                file << "INSTR    VALUE  |  OPCODE  | ADRESS" << endl;
+                file << "----------------+----------+-------" << endl;
+
+                 const auto instructionCount = static_cast<word>(instructions.size());
+
+                 for(word adr = 0; adr < instructionCount; ++adr) {
+                     const auto& i = instructions[adr];
+
+                     file << std::setw(8) << std::left << std::setfill(' ') << i.keyword << std::right;
+
+                     if(!i.is_24bit_instruction())
+                         file << " 0x" << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(i.argument.val);
+                     else
+                         file << "       ";
+
+                     // Opcode
+                     file << " | 0x";
+                     file << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(i.opcode.val);
+                     file << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(i.argument.val);
+
+                     // Adress
+                     file << " | 0x" << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(adr);
+
+                     file << endl;
+
+                 }
             }
 
             file.close();

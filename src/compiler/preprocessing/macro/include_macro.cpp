@@ -18,6 +18,13 @@ namespace comp {
         try {
             string filePath = preprocessor.extract_arg_substring(args[0], 0).second;
             string sourceCode = rread_file(filePath);
+
+            auto commentResult = preprocessor.comment_pass(sourceCode);
+            while(commentResult.second) {
+                sourceCode = commentResult.first;
+                commentResult = preprocessor.comment_pass(sourceCode);
+            }
+
             sourceCode = preprocessor.expand_macros(sourceCode);
             body = sourceCode;
 

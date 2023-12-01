@@ -62,29 +62,27 @@ namespace comp {
             file << "    " << token.get_value() << endl;
         }
 
-        /*
-        for(size_t i = 0; i < tokens.size(); ++i) {
-            const auto& token = tokens[i];
-            const auto& type = token.get_type();
-
-            if(type != LABEL_START) {
-                file << "    " << token.get_value();
-
-                if((i + 1) < tokens.size()) {
-                    const auto& nextToken = tokens[++i];
-                    const auto& nextTokenType = nextToken.get_type();
-
-                    if(nextTokenType == NUMERIC || nextTokenType == LABEL) {
-                        file << " " << nextToken.get_value();
-                    }
-                }
-            } else {
-                file << token.get_value();
-            }
-
-            file << endl;
-        } */
-
+        // for(size_t i = 0; i < tokens.size(); ++i) {
+        //     const auto& token = tokens[i];
+        //     const auto& type = token.get_type();
+//
+        //     if(type != LABEL_START) {
+        //         file << "    " << token.get_value();
+//
+        //         if((i + 1) < tokens.size()) {
+        //             const auto& nextToken = tokens[++i];
+        //             const auto& nextTokenType = nextToken.get_type();
+//
+        //             if(nextTokenType == NUMERIC || nextTokenType == LABEL) {
+        //                 file << " " << nextToken.get_value();
+        //             }
+        //         }
+        //     } else {
+        //         file << token.get_value();
+        //     }
+//
+        //     file << endl;
+        // }
 
         file.close();
     }

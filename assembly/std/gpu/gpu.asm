@@ -1,8 +1,7 @@
-@IF_NOT_DEF(@GPU_ASM_INCLUDE_GUARD,
-    @MACRO(@GPU_ASM_INCLUDE_GUARD, (), ())
+@IF_NOT_DEF(@GPU_GPU_ASM_INCLUDE_GUARD,
+    @MACRO(@GPU_GPU_ASM_INCLUDE_GUARD, (), ())
 
-    @INCLUDE("assembly/std/stack.asm")
-    @INCLUDE("assembly/std/memory.asm")
+    @INCLUDE("assembly/std/gpu/common.asm")
 
     @MACRO(@SEND_TO_GPU, (@DATA),
         push @DATA
@@ -14,8 +13,7 @@
         @LOAD_TOP_AT(0)
     )
 
-    @MACRO(@GPU_CONTEXT, (@BODY),
-        device 0
-        @BODY
+    @MACRO(@MARK_GPU_STATE, (@STATE),
+        @STORE(@STATE, 0xffff)
     )
 )

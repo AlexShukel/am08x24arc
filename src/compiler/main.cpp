@@ -6,7 +6,7 @@ int main() {
 
     {
         vector<string> sources = {
-                "assembly/examples/gfx_cpu.asm"
+                "assembly/examples/gfx/gfx_cpu.asm"
         };
 
         CompilerFlags flags = {
@@ -21,12 +21,12 @@ int main() {
 
         auto result = compiler.compile();
 
-        result.export_to_file("assembly/examples/gfx_cpu.txt", LOGISIM);
+        result.export_to_file("assembly/examples/gfx/gfx_cpu.txt", LOGISIM);
     }
 
     {
         vector<string> sources = {
-                "assembly/examples/gfx_gpu.asm"
+                "assembly/examples/gfx/gfx_gpu.asm"
         };
 
         CompilerFlags flags = {
@@ -41,7 +41,8 @@ int main() {
 
         auto result = compiler.compile();
 
-        result.export_to_file("assembly/examples/gfx_gpu.txt", LOGISIM);
+        result.export_to_file("assembly/examples/gfx/gfx_gpu.txt", LOGISIM);
+        result.export_to_file("assembly/examples/gfx/gfx_gpu_test.asm", ASSEMBLY);
     }
 
     return 0;
