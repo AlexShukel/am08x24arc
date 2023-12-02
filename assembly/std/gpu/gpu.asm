@@ -12,8 +12,4 @@
     @MACRO(@LOAD_GPU_INPUT, (),
         @LOAD_TOP_AT(0)
     )
-
-    @MACRO(@MARK_GPU_STATE, (@STATE),
-        @STORE(@STATE, 0xffff)
-    )
 )

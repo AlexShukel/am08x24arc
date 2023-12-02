@@ -4,9 +4,9 @@
     @MACRO(@DUMMY_ADRESS, (), 0x0000)
     @MACRO(@NULLPTR, (), @DUMMY_ADRESS)
 
-    @MACRO(@STORE, (@VAL1, @VAL2),
+    @MACRO(@STORE, (@VAL1, @ADR),
         push @VAL1
-        push @VAL2
+        push @ADR
         store
         pop
         pop

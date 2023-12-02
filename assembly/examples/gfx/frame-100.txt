@@ -1,0 +1,2 @@
+v2.0 raw
+ffff ffff ffff ffff ffff ffff ffff ffff 4003 fff8 000f fff8 000f fff8 001f fff8 001f fff8 000f fffc 000f fffc 2003 fff8 6003 fff0 6003 fff0 4003 fff0 4003 fff8 8003 ffff 8003 ffff 8003 ffff 0007 ffff 0007 fffe 0007 fffe 0007 fffe 000f ffff 800f ffff c00f ffff f01f ffff f07f ffff ffff ffff ffff ffff ffff ffff ffff ffff 

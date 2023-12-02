@@ -3,11 +3,10 @@
 
     @INCLUDE("assembly/std/gpu/common.asm")
 
-    @MACRO(@SEND_TO_GPU, (@DATA),
-        push @DATA
-
-        @STORE_TOP_AT(0xffff)
-
+    @MACRO(@GET_GPU_STATE, (),
+        push @GPU_STATE_REGISTER
+        load
+        swap
         pop
     )
 
@@ -17,7 +16,7 @@
         $WAIT_GPU_STATE_PROC_LOOP:
             dup
 
-            load
+            @GET_GPU_STATE
 
             @JMP_EQL($WAIT_GPU_STATE_PROC_LOOP_BREAK)
             pop

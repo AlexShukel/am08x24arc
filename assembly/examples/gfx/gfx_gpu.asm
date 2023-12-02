@@ -5,74 +5,73 @@ jmpa $MAIN
 @INCLUDE("assembly/std/arithmetic.asm")
 @INCLUDE("assembly/std/procedure.asm")
 
-@MACRO(@GPU_INPUT_DEVICE, (), 0x0000)
-@MACRO(@GPU_SCREEN_DEVICE, (), 0x0007)
-
-@DECL_PROC($READ_GPU_INPUT,
-    $READ_LOOP:
-        push 0x000a
-        load
-        swap
-        pop
-
-        push $STOP_LOOP
-        jnz
-
-        pop
-        pop
-
-        jmpa $READ_LOOP
-
-    $STOP_LOOP:
-        pop
-
-    swap
-)
-
 @MACRO(@CONTEXT, (@DEVICE, @BODY),
     device @DEVICE
 
     @BODY
 )
 
-$GPU_STATE_SWAP_BUFFERS:
-    @POP2
+@DECL_PROC($WAIT_STATE_PROC,
+    swap
 
-    @CONTEXT{@GPU_INPUT_DEVICE,
-        @MARK_GPU_STATE(@GPU_STATE_BUSY)
-    }
+    $WAIT_STATE_PROC_LOOP:
+        dup
 
-    @CONTEXT{@GPU_SCREEN_DEVICE,
-        @STORE(0xffff, @NULLPTR)
-        @STORE(0xffff, @NULLPTR)
-        @STORE(0xffff, @NULLPTR)
+        load # Get state
 
-        store
-    }
+        @JMP_EQL($WAIT_STATE_PROC_LOOP_BREAK)
+        pop
 
-    @CONTEXT{@GPU_INPUT_DEVICE,
-        @MARK_GPU_STATE(@GPU_STATE_READY)
-    }
+        jmpa $WAIT_STATE_PROC_LOOP
 
-    jmpa $MAIN
+    $WAIT_STATE_PROC_LOOP_BREAK:
+        pop
+
+    swap
+)
+
+@MACRO(@WAIT_STATE, (@STATE),
+    push @STATE
+    @CALL($WAIT_STATE_PROC)
+    pop
+)
 
 $GPU_STATE_0:
     @POP2 # Popping adress, mode value
 
-    @CONTEXT{@GPU_INPUT_DEVICE,
-        @MARK_GPU_STATE(@GPU_STATE_READY)
-        @CALL($READ_GPU_INPUT)
+    # Lets get value 1
+    @CONTEXT{@GPU_STATE_REGISTER,
+        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
+        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
+    }
 
-        @MARK_GPU_STATE(@GPU_STATE_READY)
-        @CALL($READ_GPU_INPUT)
+    @CONTEXT{@GPU_DATA_REGISTER,
+        load
+    }
 
-        @MARK_GPU_STATE(@GPU_STATE_READY)
-        @CALL($READ_GPU_INPUT)
+    # Lets get value 2
+    @CONTEXT{@GPU_STATE_REGISTER,
+        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
+        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
+    }
+
+    @CONTEXT{@GPU_DATA_REGISTER,
+        load
+    }
+
+    # Lets get adress
+    @CONTEXT{@GPU_STATE_REGISTER,
+        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
+        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
 
         @MARK_GPU_STATE(@GPU_STATE_BUSY)
     }
 
-    @CONTEXT{@GPU_SCREEN_DEVICE,
+    @CONTEXT{@GPU_DATA_REGISTER,
+        load
+    }
+
+    @CONTEXT{@GPU_SCREEN_REGISTER,
         @TOP_STORE(@NULLPTR)
         pop
 
@@ -90,34 +89,49 @@ $GPU_STATE_0:
 $GPU_STATE_1:
     @POP2 # Popping adress, mode value
 
-    @CONTEXT{@GPU_INPUT_DEVICE,
-        @MARK_GPU_STATE(@GPU_STATE_READY)
-    }
+    push 0x0020
+    halt
 
     jmpa $MAIN
 
+$GPU_STATE_SWAP_BUFFERS:
+    @POP2
+
+    push 0x0030
+    halt
+
+    jmpa $MAIN
+
+@MACRO(@MARK_GPU_STATE, (@STATE),
+    @STORE(@STATE, @NULLPTR)
+)
+
 $MAIN:
-    @CONTEXT{@GPU_INPUT_DEVICE,
+    @CONTEXT{@GPU_STATE_REGISTER,
         @MARK_GPU_STATE(@GPU_STATE_READY)
-
-        @CALL($READ_GPU_INPUT)
-
-        @MARK_GPU_STATE(@GPU_STATE_BUSY)
     }
 
-    dup
-    push @GPU_STATE_MODE_0
-    @JMP_EQL($GPU_STATE_0)
-    pop
+    $LOOP:
+        @CONTEXT{@GPU_STATE_REGISTER,
+            load
+        }
 
-    dup
-    push @GPU_STATE_MODE_1
-    @JMP_EQL($GPU_STATE_1)
-    pop
+        dup
+        push @GPU_STATE_MODE_0
+        @JMP_EQL($GPU_STATE_0)
+        pop
 
-    dup
-    push @GPU_STATE_SWAP_BUFFERS
-    @JMP_EQL($GPU_STATE_SWAP_BUFFERS)
-    pop
+        dup
+        push @GPU_STATE_MODE_1
+        @JMP_EQL($GPU_STATE_1)
+        pop
+
+        dup
+        push @GPU_STATE_SWAP_BUFFERS
+        @JMP_EQL($GPU_STATE_SWAP_BUFFERS)
+        pop
+
+        pop
+        jmpa $LOOP
 
     halt

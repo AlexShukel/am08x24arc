@@ -64,4 +64,38 @@
 
         jmpa $JMP_EQL_PROC
     )
+
+    $JMP_NEQL_PROC: # FAIL_ADRS COMP ADRESS
+        swap # COMP FAIL_ADRS ADRESS
+
+        push $JMP_NEQL_PROC_SUCC # SUC_LABEL COMP FAIL_ADRS ADRESS
+        jnz
+
+        $JMP_NEQL_PROC_FAIL:
+            pop             # COMP FAIL_ADRS ADRESS
+            pop             # FAIL_ADRS ADRESS
+            swap            # ADRESS FAIL_ADRS
+            pop             # FAIL_ADRS
+
+            @ADD_CONST(2)
+
+            jmpt
+
+        $JMP_NEQL_PROC_SUCC:
+            pop             # COMP FAIL_ADRS ADRESS
+            pop             # FAIL_ADRS ADRESS
+            pop             # ADRESS
+
+            jmpt
+
+    @MACRO(@JMP_NEQL, (@ADRESS),
+        @SUB
+
+        push @ADRESS        # ADRESS COMP
+        swap                # COMP ADRESS
+
+        pushpc              # FAIL_ADRS COMP ADRESS
+
+        jmpa $JMP_NEQL_PROC
+    )
 )
