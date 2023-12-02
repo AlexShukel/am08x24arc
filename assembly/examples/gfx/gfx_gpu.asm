@@ -15,44 +15,45 @@ jmpa $MAIN
     swap
 
     $WAIT_STATE_PROC_LOOP:
-        dup
-
-        load # Get state
+        load
 
         @JMP_EQL($WAIT_STATE_PROC_LOOP_BREAK)
-        pop
+        @POP3
 
         jmpa $WAIT_STATE_PROC_LOOP
 
     $WAIT_STATE_PROC_LOOP_BREAK:
-        pop
-
-    swap
+        @POP4
 )
 
 @MACRO(@WAIT_STATE, (@STATE),
     push @STATE
     @CALL($WAIT_STATE_PROC)
-    pop
 )
 
 $GPU_STATE_0:
-    @POP2 # Popping adress, mode value
+    @POP4 # Popping adress, cmp value, mode value
+
 
     # Lets get value 1
     @CONTEXT{@GPU_STATE_REGISTER,
         @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
         @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
+
+        @MARK_GPU_STATE(@GPU_STATE_BUSY)
+
     }
 
     @CONTEXT{@GPU_DATA_REGISTER,
         load
     }
 
+
     # Lets get value 2
     @CONTEXT{@GPU_STATE_REGISTER,
         @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
         @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
+        @MARK_GPU_STATE(@GPU_STATE_BUSY)
     }
 
     @CONTEXT{@GPU_DATA_REGISTER,
@@ -63,7 +64,6 @@ $GPU_STATE_0:
     @CONTEXT{@GPU_STATE_REGISTER,
         @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
         @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-
         @MARK_GPU_STATE(@GPU_STATE_BUSY)
     }
 
@@ -87,7 +87,7 @@ $GPU_STATE_0:
     jmpa $MAIN
 
 $GPU_STATE_1:
-    @POP2 # Popping adress, mode value
+    @POP3 # Popping adress, cmp value, mode value
 
     push 0x0020
     halt
@@ -95,7 +95,7 @@ $GPU_STATE_1:
     jmpa $MAIN
 
 $GPU_STATE_SWAP_BUFFERS:
-    @POP2
+    @POP3 # Popping adress, cmp value, mode value
 
     push 0x0030
     halt
@@ -116,20 +116,17 @@ $MAIN:
             load
         }
 
-        dup
         push @GPU_STATE_MODE_0
         @JMP_EQL($GPU_STATE_0)
-        pop
+        @POP3
 
-        dup
         push @GPU_STATE_MODE_1
         @JMP_EQL($GPU_STATE_1)
-        pop
+        @POP3
 
-        dup
         push @GPU_STATE_SWAP_BUFFERS
         @JMP_EQL($GPU_STATE_SWAP_BUFFERS)
-        pop
+        @POP3
 
         pop
         jmpa $LOOP

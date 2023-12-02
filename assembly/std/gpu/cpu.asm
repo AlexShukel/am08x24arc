@@ -10,28 +10,29 @@
         pop
     )
 
+    # (RET) STATE
     @DECL_PROC($WAIT_GPU_STATE_PROC,
-        swap
+        swap                                            # STATE (RET)
 
         $WAIT_GPU_STATE_PROC_LOOP:
-            dup
+            @GET_GPU_STATE                              # CUR_STATE STATE (RET)
 
-            @GET_GPU_STATE
-
-            @JMP_EQL($WAIT_GPU_STATE_PROC_LOOP_BREAK)
-            pop
+            @JMP_EQL($WAIT_GPU_STATE_PROC_LOOP_BREAK)   # (ADRESS) (CMP) CUR_STATE STATE (RET)
+            @POP3                                       # (CMP) CUR_STATE STATE (RET)
+                                                        # CUR_STATE STATE (RET)
+                                                        # STATE (RET)
 
             jmpa $WAIT_GPU_STATE_PROC_LOOP
 
-        $WAIT_GPU_STATE_PROC_LOOP_BREAK:
-            pop
-
-        swap
+        $WAIT_GPU_STATE_PROC_LOOP_BREAK:                # (ADRESS) (CMP) CUR_STATE STATE (RET)
+            @POP4                                       # (CMP) CUR_STATE STATE (RET)
+                                                        # CUR_STATE STATE (RET)
+                                                        # STATE (RET)
+                                                        # (RET)
     )
 
     @MACRO(@WAIT_GPU_STATE, (@STATE),
         push @STATE
         @CALL($WAIT_GPU_STATE_PROC)
-        pop
     )
 )

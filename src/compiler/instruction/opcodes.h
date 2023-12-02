@@ -28,26 +28,36 @@ namespace comp {
     DEFINE_INSTRUCTION          (DEVICE, 0x20)
 
     /* ARITHMETIC */
-    DEFINE_24BIT_INSTRUCTION    (ADD, 0xc2, 0x0000);
-    DEFINE_24BIT_INSTRUCTION    (SUB, 0xc2, 0x0002);
-    // DEFINE_INSTRUCTION       (NEG, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (NOT, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (AND, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (OR, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (NAND, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (NOR, xxxx, xxxx)
-    // DEFINE_INSTRUCTION       (XOR, xxxx, xxxx)
+    DEFINE_24BIT_INSTRUCTION    (ADD, 0xc2, 0x0000)
+    DEFINE_24BIT_INSTRUCTION    (SUB, 0xc2, 0x0001)
+    DEFINE_24BIT_INSTRUCTION    (CMP, 0xc2, 0x0002)
+    DEFINE_24BIT_INSTRUCTION    (NEG, 0xc2, 0x0003)
+    DEFINE_24BIT_INSTRUCTION    (NOT, 0xc2, 0x0004)
+    DEFINE_24BIT_INSTRUCTION    (AND, 0xc2, 0x0005)
+    DEFINE_24BIT_INSTRUCTION    (OR,  0xc2, 0x0006)
+    DEFINE_24BIT_INSTRUCTION    (NAND,0xc2, 0x0007)
+    DEFINE_24BIT_INSTRUCTION    (NOR, 0xc2, 0x0008)
+    DEFINE_24BIT_INSTRUCTION    (XOR, 0xc2, 0x0009)
 
     /* FLOW */
-    DEFINE_INSTRUCTION          (JMPA, 0x08);
-    DEFINE_24BIT_INSTRUCTION    (JMPT, 0x8e, 0x3800);
-    DEFINE_24BIT_INSTRUCTION    (JZ, 0x8e, 0x2000);
-    DEFINE_24BIT_INSTRUCTION    (JNZ, 0x8e, 0x1800);
-    DEFINE_24BIT_INSTRUCTION    (JNEG, 0x8e, 0x1000);
-    DEFINE_24BIT_INSTRUCTION    (JPOS, 0x8e, 0x0800);
-    DEFINE_24BIT_INSTRUCTION    (WAIT, 0x80, 0x0000);
-    DEFINE_24BIT_INSTRUCTION    (PUSHPC, 0xc3, 0x0000);
+    DEFINE_INSTRUCTION          (JMPA, 0x08)
+    DEFINE_24BIT_INSTRUCTION    (JMPT, 0x8e, 0x3800)
+    DEFINE_24BIT_INSTRUCTION    (JZ, 0x8e, 0x2000)
+    DEFINE_24BIT_INSTRUCTION    (JNZ, 0x8e, 0x1800)
+    DEFINE_24BIT_INSTRUCTION    (JNEG, 0x8e, 0x1000)
+    DEFINE_24BIT_INSTRUCTION    (JPOS, 0x8e, 0x0800)
 
+    // Cool idea, but will not work
+    // DEFINE_24BIT_INSTRUCTION    (JMPTC, 0x8e, 0xb800)
+    // DEFINE_24BIT_INSTRUCTION    (JZC, 0x8e, 0xa000)
+    // DEFINE_24BIT_INSTRUCTION    (JNZC, 0x8e, 0x9800)
+    // DEFINE_24BIT_INSTRUCTION    (JNEGC, 0x8e, 0x9000)
+    // DEFINE_24BIT_INSTRUCTION    (JPOSC, 0x8e, 0x8800)
+
+    DEFINE_24BIT_INSTRUCTION    (WAIT, 0x80, 0x0000)
+    DEFINE_24BIT_INSTRUCTION    (PUSHPC, 0xc3, 0x0000)
+
+    /* Device */
     DEFINE_24BIT_INSTRUCTION    (HALT, 0x00, 0x0000);
 
     const static InstructionSet DEFAULT_INSTRUCTION_SET(
@@ -65,13 +75,14 @@ namespace comp {
             /* ARITHMETIC */
             ADD(),
             SUB(),
-            // NEG()
-            // NOT()
-            // AND()
-            // OR()
-            // NAND()
-            // NOR()
-            // XOR()
+            CMP(),
+            NEG(),
+            NOT(),
+            AND(),
+            OR(),
+            NAND(),
+            NOR(),
+            XOR(),
 
             /* FLOW */
             JMPA(0),
@@ -80,6 +91,13 @@ namespace comp {
             JNZ(),
             JNEG(),
             JPOS(),
+
+            // JMPTC(),
+            // JZC(),
+            // JNZC(),
+            // JNEGC(),
+            // JPOSC(),
+
             WAIT(),
             PUSHPC(),
 
