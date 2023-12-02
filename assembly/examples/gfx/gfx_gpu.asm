@@ -34,41 +34,16 @@ jmpa $MAIN
 $GPU_STATE_0:
     @POP4 # Popping adress, cmp value, mode value
 
-
     # Lets get value 1
     @CONTEXT{@GPU_STATE_REGISTER,
         @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
         @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-
-        @MARK_GPU_STATE(@GPU_STATE_BUSY)
-
     }
 
     @CONTEXT{@GPU_DATA_REGISTER,
-        load
-    }
-
-
-    # Lets get value 2
-    @CONTEXT{@GPU_STATE_REGISTER,
-        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-        @MARK_GPU_STATE(@GPU_STATE_BUSY)
-    }
-
-    @CONTEXT{@GPU_DATA_REGISTER,
-        load
-    }
-
-    # Lets get adress
-    @CONTEXT{@GPU_STATE_REGISTER,
-        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-        @MARK_GPU_STATE(@GPU_STATE_BUSY)
-    }
-
-    @CONTEXT{@GPU_DATA_REGISTER,
-        load
+        @LOAD(0x0001)
+        @LOAD(0x0002)
+        @LOAD(0x0003)
     }
 
     @CONTEXT{@GPU_SCREEN_REGISTER,
