@@ -1,8 +1,8 @@
 #include "instruction.h"
 
 namespace comp {
-    bool Instruction::is_24bit_instruction() const {
-        return (opcode.val & 0b10000000) != 0;
+    bool Instruction::is_require_argument() const {
+        return requireArgument;
     }
 
     bool Instruction::is_halt() const {

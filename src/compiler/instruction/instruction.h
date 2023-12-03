@@ -14,7 +14,9 @@ namespace comp {
         Opcode opcode;
         Argument argument;
 
-        bool is_24bit_instruction() const;
+        bool requireArgument;
+
+        bool is_require_argument() const;
         bool is_halt() const;
 
         /* Need this for storing in std set*/

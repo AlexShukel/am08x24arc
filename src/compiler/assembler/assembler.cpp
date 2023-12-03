@@ -63,7 +63,7 @@ namespace comp {
             if(tokenType == WORD) {
                 auto instruction = instuctions.find(to_upper_case(token.get_value()));
 
-                if(!instruction.is_24bit_instruction() && !instruction.is_halt()) {
+                if(instruction.is_require_argument()) {
                     ++it;
 
                     if(it == tokens.end())

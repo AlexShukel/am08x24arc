@@ -6,7 +6,7 @@ int main() {
 
     {
         vector<string> sources = {
-                "assembly/examples/gfx/gfx_cpu.asm"
+                "assembly/examples/common/example1.asm"
         };
 
         CompilerFlags flags = {
@@ -21,28 +21,8 @@ int main() {
 
         auto result = compiler.compile();
 
-        result.export_to_file("assembly/examples/gfx/gfx_cpu.txt", LOGISIM);
-    }
-
-    {
-        vector<string> sources = {
-                "assembly/examples/gfx/gfx_gpu.asm"
-        };
-
-        CompilerFlags flags = {
-                .preprocessor = {
-                        .exportCommentPassResult = true,
-                        .exportMacroPassResult = true
-                },
-                .exportTokenizerResult = true
-        };
-
-        Compiler compiler(sources, flags);
-
-        auto result = compiler.compile();
-
-        result.export_to_file("assembly/examples/gfx/gfx_gpu.txt", LOGISIM);
-        result.export_to_file("assembly/examples/gfx/gfx_gpu_test.asm", ASSEMBLY);
+        result.export_to_file("assembly/examples/common/example1.txt", LOGISIM);
+        result.export_to_file("dump.asm", ASSEMBLY);
     }
 
     return 0;

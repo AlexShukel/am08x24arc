@@ -1,20 +1,7 @@
-jmpa $MAIN
+device 1
 
-@MACRO(@CODE, (@OPERATIONS), @OPERATIONS)
+push 0xaaaa
+storea 0xffff
+drop
 
-@NOTIFY{"You can use \{ macroscopes \} like this"}
-@NOTIFY("This is a, simple macro")
-
-@CODE {
-$MAIN:
-    push 0xffff
-    pop
-
-    $LABEL:
-        push 0xffff
-        pop
-
-        jmpa $LABEL
-
-        halt
-}
+loada 0xffff

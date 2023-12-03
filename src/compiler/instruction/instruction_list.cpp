@@ -41,7 +41,7 @@ namespace comp {
 
                      file << std::setw(8) << std::left << std::setfill(' ') << i.keyword << std::right;
 
-                     if(!i.is_24bit_instruction())
+                     if(i.is_require_argument())
                          file << " 0x" << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(i.argument.val);
                      else
                          file << "       ";
