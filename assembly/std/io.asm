@@ -1,10 +1,6 @@
-@IF_NOT_DEF(@GPU_COMMON_ASM_INCLUDE_GUARD,
-    @MACRO(@GPU_COMMON_ASM_INCLUDE_GUARD, (), ())
+@IF_NOT_DEF(@STD_IO_ASM_INCLUDE_GUARD,
+    @MACRO(@STD_IO_ASM_INCLUDE_GUARD, (), ())
 
-    @INCLUDE("assembly/std/stack.asm")
-    @INCLUDE("assembly/std/memory.asm")
-
-    # STATES
     @MACRO(@GPU_STATE_READY, (), 0x0001)
     @MACRO(@GPU_STATE_BUSY, (), 0x0002)
     @MACRO(@GPU_STATE_DATA_UPLOAD_DONE, (), 0x0003)
@@ -14,12 +10,14 @@
     @MACRO(@GPU_STATE_MODE_1, (), 0x0006)
     @MACRO(@GPU_STATE_SWAP_BUFFERS, (), 0x0007)
 
-    # POINTERS
-    @MACRO(@GPU_DUMMY_ADRESS, (), 0xffff)
-    @MACRO(@GPU_NULLPTR, (), @GPU_DUMMY_ADRESS)
-
     @MACRO(@GPU_STATE_REGISTER, (), 0x0000)
     @MACRO(@GPU_DATA_REGISTER, (), 0x0001)
     @MACRO(@GPU_SCREEN_REGISTER, (), 0x0007)
+
+    @MACRO(@CONTEXT, (@DEVICE, @BODY),
+        device @DEVICE
+
+        @BODY
+    )
 )
 

@@ -1,60 +1,70 @@
 jmpa $MAIN
 
-@INCLUDE("assembly/std/gpu/gpu.asm")
+@INCLUDE("assembly/std/io.asm")
 
-@INCLUDE("assembly/std/arithmetic.asm")
-@INCLUDE("assembly/std/procedure.asm")
+@MACRO(@NULLPTR, (), 0x0000)
 
-@MACRO(@CONTEXT, (@DEVICE, @BODY),
-    device @DEVICE
-
-    @BODY
-)
-
-@DECL_PROC($WAIT_STATE_PROC,
-    swap
-
-    $WAIT_STATE_PROC_LOOP:
-        load
-
-        @JMP_EQL($WAIT_STATE_PROC_LOOP_BREAK)
-        @POP3
-
-        jmpa $WAIT_STATE_PROC_LOOP
-
-    $WAIT_STATE_PROC_LOOP_BREAK:
-        @POP4
-)
-
-@MACRO(@WAIT_STATE, (@STATE),
+@MACRO(@SET_GPU_STATE, (@STATE),
     push @STATE
-    @CALL($WAIT_STATE_PROC)
+    storea @GPU_STATE_REGISTER
+    drop
+)
+
+@MACRO(@ADD_CONST, (@VALUE),
+    push @VALUE
+    add
+    swap
+    drop
+    swap
+    drop
+)
+
+$WAIT_GPU_STATE_PROC:               # (@STATE0) (RET)
+    $WAIT_LOOP:
+        loada @GPU_STATE_REGISTER   # (@STATE1) (@STATE0) (RET)
+
+        jea $BREAK
+        drop                        # (@STATE0) (RET)
+
+        jmpa $WAIT_LOOP
+
+    $BREAK:
+    drop                            # (@STATE0) (RET)
+    drop                            # (RET)
+
+    @ADD_CONST(3)
+    jmp
+
+@MACRO(@WAIT_GPU_STATE, (@STATE),
+    pushpc
+    push @STATE
+    jmpa $WAIT_GPU_STATE_PROC
+    drop
 )
 
 $GPU_STATE_0:
-    @POP4 # Popping adress, cmp value, mode value
+    drop
+    drop
 
-    # Lets get value 1
-    @CONTEXT{@GPU_STATE_REGISTER,
-        @MARK_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-        @WAIT_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-    }
+    @SET_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
+
+    @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
 
     @CONTEXT{@GPU_DATA_REGISTER,
-        @LOAD(0x0001)
-        @LOAD(0x0002)
-        @LOAD(0x0003)
+        loada 0x0001
+        loada 0x0002
+        loada 0x0003
     }
 
     @CONTEXT{@GPU_SCREEN_REGISTER,
-        @TOP_STORE(@NULLPTR)
-        pop
+        storea @NULLPTR
+        drop
 
-        @TOP_STORE(@NULLPTR)
-        pop
+        storea @NULLPTR
+        drop
 
-        @TOP_STORE(@NULLPTR)
-        pop
+        storea @NULLPTR
+        drop
 
         store
     }
@@ -62,48 +72,40 @@ $GPU_STATE_0:
     jmpa $MAIN
 
 $GPU_STATE_1:
-    @POP3 # Popping adress, cmp value, mode value
+    drop
+    drop
 
-    push 0x0020
     halt
-
-    jmpa $MAIN
 
 $GPU_STATE_SWAP_BUFFERS:
-    @POP3 # Popping adress, cmp value, mode value
+    drop
+    drop
 
-    push 0x0030
     halt
-
-    jmpa $MAIN
-
-@MACRO(@MARK_GPU_STATE, (@STATE),
-    @STORE(@STATE, @NULLPTR)
-)
 
 $MAIN:
     @CONTEXT{@GPU_STATE_REGISTER,
-        @MARK_GPU_STATE(@GPU_STATE_READY)
+        @SET_GPU_STATE(@GPU_STATE_READY)
+
+        $LOOP:
+            loada @NULLPTR
+
+            push @GPU_STATE_MODE_0
+            jea $GPU_STATE_0
+            drop
+
+            push @GPU_STATE_MODE_1
+            jea $GPU_STATE_1
+            drop
+
+            push @GPU_STATE_SWAP_BUFFERS
+            jea $GPU_STATE_SWAP_BUFFERS
+            drop
+
+            drop
+            jmpa $LOOP
+
+        # @WAIT_GPU_STATE(@GPU_STATE_MODE_0)
     }
-
-    $LOOP:
-        @CONTEXT{@GPU_STATE_REGISTER,
-            load
-        }
-
-        push @GPU_STATE_MODE_0
-        @JMP_EQL($GPU_STATE_0)
-        @POP3
-
-        push @GPU_STATE_MODE_1
-        @JMP_EQL($GPU_STATE_1)
-        @POP3
-
-        push @GPU_STATE_SWAP_BUFFERS
-        @JMP_EQL($GPU_STATE_SWAP_BUFFERS)
-        @POP3
-
-        pop
-        jmpa $LOOP
 
     halt

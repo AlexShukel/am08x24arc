@@ -55,21 +55,23 @@ $MAIN:
         }
 
         @CONTEXT{@GPU_DEVICE,
-            @STORE(@GPU_STATE_MODE_0, @GPU_STATE_REGISTER)
+            @STORE(@GPU_STATE_MODE_0, 0x0000)
+        }
+
+        @CONTEXT{@GPU_DEVICE,
+            @STORE(@GPU_STATE_MODE_0, 0x0000)
 
             @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-            @TOP_STORE(@GPU_DATA_REGISTER)
-            pop
-            @STORE(@GPU_STATE_DATA_UPLOAD_DONE, @GPU_STATE_REGISTER)
 
-            @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-            @TOP_STORE(@GPU_DATA_REGISTER)
+            @TOP_STORE(0x0001)
             pop
-            @STORE(@GPU_STATE_DATA_UPLOAD_DONE, @GPU_STATE_REGISTER)
 
-            @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-            @TOP_STORE(@GPU_DATA_REGISTER)
+            @TOP_STORE(0x0002)
             pop
+
+            @TOP_STORE(0x0003)
+            pop
+
             @STORE(@GPU_STATE_DATA_UPLOAD_DONE, @GPU_STATE_REGISTER)
         }
 
