@@ -6,33 +6,19 @@ jmpa $MAIN
 
 @MACRO(@SET_GPU_STATE, (@STATE),
     push @STATE
-    storea @GPU_STATE_REGISTER
-    drop
+    storeac @GPU_STATE_REGISTER
 )
 
-@MACRO(@ADD_CONST, (@VALUE),
-    push @VALUE
-    add
-    swap
-    drop
-    swap
-    drop
-)
-
-$WAIT_GPU_STATE_PROC:               # (@STATE0) (RET)
+$WAIT_GPU_STATE_PROC:
     $WAIT_LOOP:
-        loada @GPU_STATE_REGISTER   # (@STATE1) (@STATE0) (RET)
-
-        jea $BREAK
-        drop                        # (@STATE0) (RET)
-
+        loada @GPU_STATE_REGISTER
+        jeac $BREAK
         jmpa $WAIT_LOOP
 
     $BREAK:
-    drop                            # (@STATE0) (RET)
-    drop                            # (RET)
+    drop
 
-    @ADD_CONST(3)
+    addat 3
     jmp
 
 @MACRO(@WAIT_GPU_STATE, (@STATE),
@@ -43,7 +29,6 @@ $WAIT_GPU_STATE_PROC:               # (@STATE0) (RET)
 )
 
 $GPU_STATE_0:
-    drop
     drop
 
     @SET_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
@@ -57,14 +42,9 @@ $GPU_STATE_0:
     }
 
     @CONTEXT{@GPU_SCREEN_REGISTER,
-        storea @NULLPTR
-        drop
-
-        storea @NULLPTR
-        drop
-
-        storea @NULLPTR
-        drop
+        storeac @NULLPTR
+        storeac @NULLPTR
+        storeac @NULLPTR
 
         store
     }
@@ -73,12 +53,10 @@ $GPU_STATE_0:
 
 $GPU_STATE_1:
     drop
-    drop
 
     halt
 
 $GPU_STATE_SWAP_BUFFERS:
-    drop
     drop
 
     halt
@@ -91,21 +69,16 @@ $MAIN:
             loada @NULLPTR
 
             push @GPU_STATE_MODE_0
-            jea $GPU_STATE_0
-            drop
+            jeac $GPU_STATE_0
 
             push @GPU_STATE_MODE_1
-            jea $GPU_STATE_1
-            drop
+            jeac $GPU_STATE_1
 
             push @GPU_STATE_SWAP_BUFFERS
-            jea $GPU_STATE_SWAP_BUFFERS
-            drop
+            jeac $GPU_STATE_SWAP_BUFFERS
 
             drop
             jmpa $LOOP
-
-        # @WAIT_GPU_STATE(@GPU_STATE_MODE_0)
     }
 
     halt

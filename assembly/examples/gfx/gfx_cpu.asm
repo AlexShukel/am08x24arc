@@ -6,29 +6,19 @@ jmpa $MAIN
 @MACRO(@RAM_DEVICE, (), 0x0001)
 @MACRO(@GPU_DEVICE, (), 0x0002)
 
-@MACRO(@ADD_CONST, (@VALUE),
-    push @VALUE
-    add
-    swap
-    drop
-    swap
-    drop
-)
-
 $WAIT_GPU_STATE_PROC:
     $WAIT_LOOP:
         loada @GPU_STATE_REGISTER
 
-        jea $BREAK
-        drop
+        jeac $BREAK
 
         jmpa $WAIT_LOOP
 
     $BREAK:
     drop
-    drop
 
-    @ADD_CONST(3)
+    addat 3
+
     jmp
 
 @MACRO(@WAIT_GPU_STATE, (@STATE),
@@ -40,8 +30,7 @@ $WAIT_GPU_STATE_PROC:
 
 @MACRO(@SEND_GPU_DATA, (@ADRESS, @DATA),
     push @DATA
-    storea @ADRESS
-    drop
+    storeac @ADRESS
 )
 
 @MACRO(@DDUP, (),
@@ -59,7 +48,7 @@ $MAIN:
         @CONTEXT{@ROM_DEVICE,
             load # (VALUE1) (RAM ADRESS) ROW (RAM ADRESS) ROW
             swap # (RAM ADRESS) (VALUE1)  ROW (RAM ADRESS) ROW
-            @ADD_CONST(1) # (RAM ADRESS + 1) (VALUE1)  ROW (RAM ADRESS) ROW
+            addat 1
             load # (VALUE2) (RAM ADRESS + 1) (VALUE1)  ROW (RAM ADRESS) ROW
             swap # (RAM ADRESS + 1) (VALUE2) (VALUE1)  ROW (RAM ADRESS) ROW
             drop # (VALUE2) (VALUE1)  ROW (RAM ADRESS) ROW
@@ -72,19 +61,14 @@ $MAIN:
 
             @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
 
-            storea 0x0001
-            drop
-            storea 0x0002
-            drop
-            storea 0x0003
-            drop
+            storeac 0x0001
+            storeac 0x0002
+            storeac 0x0003
 
             @SEND_GPU_DATA(@GPU_STATE_REGISTER, @GPU_STATE_DATA_UPLOAD_DONE)
 
-            @ADD_CONST(2)
-            swap
-            @ADD_CONST(1)
-            swap
+            addat 2
+            addan 1
 
             jmpa $LOOP
         }

@@ -30,37 +30,41 @@ namespace comp {
 
     DEFINE_ARGLESS_INSTRUCTION    (STORE,   0x07);
     DEFINE_INSTRUCTION            (STOREA,  0x08);
-    DEFINE_INSTRUCTION            (STOREAA, 0x09);
-    DEFINE_ARGLESS_INSTRUCTION    (LOAD,    0x0a);
-    DEFINE_INSTRUCTION            (LOADA,   0x0b);
+    DEFINE_INSTRUCTION            (STOREAC, 0x09); // Experimental
+    DEFINE_INSTRUCTION            (STOREAA, 0x0A);
+    DEFINE_ARGLESS_INSTRUCTION    (LOAD,    0x0B);
+    DEFINE_INSTRUCTION            (LOADA,   0x0C);
 
-    DEFINE_ARGLESS_INSTRUCTION    (ADD,     0x0C);
-    DEFINE_ARGLESS_INSTRUCTION    (ADDC,    0x0D); // Experimental
-    DEFINE_ARGLESS_INSTRUCTION    (SUB,     0x0E);
-    DEFINE_ARGLESS_INSTRUCTION    (CMP,     0x0F);
-    DEFINE_ARGLESS_INSTRUCTION    (NEG,     0x10);
-    DEFINE_ARGLESS_INSTRUCTION    (NOT,     0x11);
-    DEFINE_ARGLESS_INSTRUCTION    (AND,     0x12);
-    DEFINE_ARGLESS_INSTRUCTION    (OR,      0x13);
-    DEFINE_ARGLESS_INSTRUCTION    (NAND,    0x14);
-    DEFINE_ARGLESS_INSTRUCTION    (NOR,     0x15);
-    DEFINE_ARGLESS_INSTRUCTION    (XOR,     0x16);
+    DEFINE_ARGLESS_INSTRUCTION    (ADD,     0x0D);
+    DEFINE_ARGLESS_INSTRUCTION    (ADDC,    0x0E); // Experimental
+    DEFINE_INSTRUCTION            (ADDAT,   0x0F); // Experimental
+    DEFINE_INSTRUCTION            (ADDAN,   0x10); // Experimental
+    DEFINE_ARGLESS_INSTRUCTION    (SUB,     0x11);
+    DEFINE_ARGLESS_INSTRUCTION    (CMP,     0x12);
+    DEFINE_ARGLESS_INSTRUCTION    (NEG,     0x13);
+    DEFINE_ARGLESS_INSTRUCTION    (NOT,     0x14);
+    DEFINE_ARGLESS_INSTRUCTION    (AND,     0x15);
+    DEFINE_ARGLESS_INSTRUCTION    (OR,      0x16);
+    DEFINE_ARGLESS_INSTRUCTION    (NAND,    0x17);
+    DEFINE_ARGLESS_INSTRUCTION    (NOR,     0x18);
+    DEFINE_ARGLESS_INSTRUCTION    (XOR,     0x19);
 
-    DEFINE_INSTRUCTION            (JMPA,    0x17);
-    DEFINE_ARGLESS_INSTRUCTION    (JMP,     0x18);
-    DEFINE_INSTRUCTION            (JZA,     0x19);
-    DEFINE_ARGLESS_INSTRUCTION    (JZ,      0x1A);
-    DEFINE_INSTRUCTION            (JEA,     0x1B);
-    DEFINE_INSTRUCTION            (JNZA,    0x1C);
-    DEFINE_ARGLESS_INSTRUCTION    (JNZ,     0x1D);
-    DEFINE_INSTRUCTION            (JNEA,    0x1E);
-    DEFINE_INSTRUCTION            (JNEGA,   0x1F);
-    DEFINE_ARGLESS_INSTRUCTION    (JNEG,    0x20);
-    DEFINE_INSTRUCTION            (JPOSA,   0x21);
-    DEFINE_ARGLESS_INSTRUCTION    (JPOS,    0x22);
+    DEFINE_INSTRUCTION            (JMPA,    0x1A);
+    DEFINE_ARGLESS_INSTRUCTION    (JMP,     0x1B);
+    DEFINE_INSTRUCTION            (JZA,     0x1C);
+    DEFINE_ARGLESS_INSTRUCTION    (JZ,      0x1D);
+    DEFINE_INSTRUCTION            (JEA,     0x1E);
+    DEFINE_INSTRUCTION            (JEAC,    0x1F); // Experimental
+    DEFINE_INSTRUCTION            (JNZA,    0x20);
+    DEFINE_ARGLESS_INSTRUCTION    (JNZ,     0x21);
+    DEFINE_INSTRUCTION            (JNEA,    0x22);
+    DEFINE_INSTRUCTION            (JNEGA,   0x23);
+    DEFINE_ARGLESS_INSTRUCTION    (JNEG,    0x24);
+    DEFINE_INSTRUCTION            (JPOSA,   0x25);
+    DEFINE_ARGLESS_INSTRUCTION    (JPOS,    0x26);
 
-    DEFINE_INSTRUCTION            (DEVICE,  0x24);
-    DEFINE_ARGLESS_INSTRUCTION    (DEVICET, 0x25);
+    DEFINE_INSTRUCTION            (DEVICE,  0x28);
+    DEFINE_ARGLESS_INSTRUCTION    (DEVICET, 0x29);
 
     const static InstructionSet DEFAULT_INSTRUCTION_SET(
             HALT(),
@@ -74,12 +78,15 @@ namespace comp {
 
             STORE(),
             STOREA(0),
+            STOREAC(0),
             STOREAA(0),
             LOAD(),
             LOADA(0),
 
             ADD(),
             ADDC(),
+            ADDAT(0),
+            ADDAN(0),
             SUB(),
             CMP(),
             NEG(),
@@ -95,6 +102,7 @@ namespace comp {
             JZA(0),
             JZ(),
             JEA(0),
+            JEAC(0),
             JNZA(0),
             JNZ(),
             JNEA(0),
