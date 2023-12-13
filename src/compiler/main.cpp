@@ -22,7 +22,7 @@ int main() {
         auto result = compiler.compile();
 
         result.export_to_file("assembly/examples/gfx/gfx_cpu.txt", LOGISIM);
-        result.export_to_file("dump_cpu.asm", ASSEMBLY);
+        result.export_to_file("gfx_cpu_cpu.asm", ASSEMBLY);
     }
 
     {

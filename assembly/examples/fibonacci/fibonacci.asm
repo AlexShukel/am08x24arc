@@ -2,55 +2,38 @@ jmpa $MAIN
 
 @INCLUDE("assembly/std/stack.asm")
 
-@MACRO(@STORE_TOP_AT, (@ADRESS),
-    push @ADRESS
-    store
-    pop
-)
-
-@MACRO(@LOAD_TOP_AT, (@ADRESS),
-    push @ADRESS
-    load
-    swap
-    pop
-)
-
 @MACRO(@ADD, (),
     add
     swap
-    pop
+    drop
     swap
-    pop
+    drop
 )
 
 @MACRO(@ROTATE_TOP, (),
-    device 0
-    @STORE_TOP_AT(0xfff0)
-    pop
+    device 1
 
-    @STORE_TOP_AT(0xfff1)
-    pop
+    storeac 0xfff0
+    storeac 0xfff1
+    storeac 0xfff2
 
-    @STORE_TOP_AT(0xfff2)
-    pop
-
-    @LOAD_TOP_AT(0xfff1)
-    @LOAD_TOP_AT(0xfff2)
-    @LOAD_TOP_AT(0xfff0)
+    loada 0xfff1
+    loada 0xfff2
+    loada 0xfff0
 )
 
 $MAIN:
-    @PUSH2(0, 1)
+    push 0
+    push 1
 
     $LOOP:
-        dup
+        dupt
         @ROTATE_TOP
         @ADD
 
         device 3
-        push 0
-        store
-        pop
+        dupt
+        storeac 0x0000
 
        jmpa 3
 

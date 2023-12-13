@@ -59,22 +59,6 @@ $GPU_STATE_SWAP_BUFFERS:
 $GPU_STATE_0:
     @POP2 # Popping adress, mode value
 
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-    device 0xffff
-
-    halt
-
     @CONTEXT{@GPU_INPUT_DEVICE,
         @MARK_GPU_STATE(@GPU_STATE_READY)
         @CALL($READ_GPU_INPUT)

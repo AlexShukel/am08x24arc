@@ -2,6 +2,9 @@ jmpa $MAIN
 
 @INCLUDE("assembly/std/io.asm")
 
+@INCLUDE("assembly/examples/gfx/gpu_mode_0.asm")
+@INCLUDE("assembly/examples/gfx/gpu_mode_1.asm")
+
 @MACRO(@NULLPTR, (), 0x0000)
 
 @MACRO(@SET_GPU_STATE, (@STATE),
@@ -27,34 +30,6 @@ $WAIT_GPU_STATE_PROC:
     jmpa $WAIT_GPU_STATE_PROC
     drop
 )
-
-$GPU_STATE_0:
-    drop
-
-    @SET_GPU_STATE(@GPU_STATE_DATA_UPLOAD_REQUEST)
-
-    @WAIT_GPU_STATE(@GPU_STATE_DATA_UPLOAD_DONE)
-
-    @CONTEXT{@GPU_DATA_REGISTER,
-        loada 0x0001
-        loada 0x0002
-        loada 0x0003
-    }
-
-    @CONTEXT{@GPU_SCREEN_REGISTER,
-        storeac @NULLPTR
-        storeac @NULLPTR
-        storeac @NULLPTR
-
-        store
-    }
-
-    jmpa $MAIN
-
-$GPU_STATE_1:
-    drop
-
-    halt
 
 $GPU_STATE_SWAP_BUFFERS:
     drop
