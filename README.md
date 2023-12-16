@@ -1,6 +1,10 @@
 # am08x24arc
 
-## Architecture
+## Stack based architecture
+
+This architecture is based on the stack. All instructions work with the stack. For example, ADD instruction takes 2 arguments from top of the stack and then pushes their sum to the stack.
+
+Instruction set includes 41 operations. You can see all the details in `ISA.xlsx` file.
 
 ## Examples
 
