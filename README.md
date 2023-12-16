@@ -1,12 +1,9 @@
-# KOMPARCH2023
+# am08x24arc
 
-## Run logisim
+## Architecture
 
-```shell
-.\logisim.jar main.circ
-```
+## Examples
 
-Useful links:
-
-https://www.cs.swarthmore.edu/courses/CS31/F21/Labs/lab03/
-http://www.cburch.com/logisim/docs/2.7/en/html/guide/tutorial/tutor-test.html
+## License
+Onikeiso is free and open source library/software. All code in this repository is licensed under
+- MIT License ([LICENSE.md](https://github.com/AlexShukel/am08x24arc/blob/main/LICENSE.md) or https://opensource.org/license/mit/)
