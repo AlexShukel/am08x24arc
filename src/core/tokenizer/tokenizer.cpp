@@ -26,7 +26,7 @@ namespace comp {
     vector<Token> Tokenizer::tokenize(const string& text) const {
         vector<Token> tokens;
 
-        auto strings = explode(text, set{' ', '\t', '\n'});
+        auto strings = explode(text, set<char>{' ', '\t', '\n'});
 
         for(const auto& tokenStr : strings) {
             // Label

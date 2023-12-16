@@ -1,4 +1,4 @@
-#include "compiler.h"
+#include "../core/compiler.h"
 
 int main() {
     using namespace comp;
@@ -6,7 +6,7 @@ int main() {
 
     {
         vector<string> sources = {
-                "assembly/examples/gfx/gfx_cpu.asm"
+                "assembly/examples/test/test.asm"
         };
 
         CompilerFlags flags = {
@@ -21,29 +21,7 @@ int main() {
 
         auto result = compiler.compile();
 
-        result.export_to_file("assembly/examples/gfx/gfx_cpu.txt", LOGISIM);
-        result.export_to_file("gfx_cpu_cpu.asm", ASSEMBLY);
-    }
-
-    {
-        vector<string> sources = {
-                "assembly/examples/gfx/gfx_gpu.asm"
-        };
-
-        CompilerFlags flags = {
-                .preprocessor = {
-                        .exportCommentPassResult = true,
-                        .exportMacroPassResult = true
-                },
-                .exportTokenizerResult = true
-        };
-
-        Compiler compiler(sources, flags);
-
-        auto result = compiler.compile();
-
-        result.export_to_file("assembly/examples/gfx/gfx_gpu.txt", LOGISIM);
-        result.export_to_file("dump_gpu.asm", ASSEMBLY);
+        result.export_to_file("assembly/examples/test/test.txt", LOGISIM);
     }
 
     return 0;

@@ -24,7 +24,7 @@ namespace comp {
         return str;
     }
 
-    string Preprocessor::replace_sub_strs(string str,const string &subStr,const string &replacement) {
+    string Preprocessor::replace_sub_strs(string str, const string &subStr, const string &replacement) {
         size_t pos = str.find(subStr);
 
         while (pos != std::string::npos) {
@@ -107,6 +107,11 @@ namespace comp {
         return {endIndex, text.substr(index + 1, endIndex - index - 2)};
     }
 
+    string Preprocessor::open_top_scope(string text) {
+
+        return text;
+    }
+
     pair<string, vector<string>> Preprocessor::extract_args_from_index(const string& text, size_t index) const {
         unordered_map<Scope, int> argScopes;
         for(const auto& scope : get_default_scopes())
@@ -117,13 +122,17 @@ namespace comp {
         vector<string> args;
         string arg = "";
 
-        for(auto character : argSubstr.second) {
-            if(character == '\\')
+        bool skip = false;
+        for(size_t i = 0; i < argSubstr.second.size(); ++i) {
+            auto character = argSubstr.second[i];
+
+            if(character == '\\' && !skip) {
+                skip = true;
                 continue;
+            }
 
             auto beginScope = is_begin_scope(character);
             auto endScope = is_end_scope(character);
-
 
             // There we handle if scope start and end symbols are equal
             if(beginScope.first && endScope.first) {
@@ -141,11 +150,17 @@ namespace comp {
                     --argScopes[endScope.second];
             }
 
-            if(!is_in_scope(argScopes) && character == ',') {
-                args.push_back(arg);
-                arg = "";
-            } else {
+            // Todo, this work not really how it was intendant
+            if(skip) {
                 arg += character;
+                skip = false;
+            } else {
+                if(!is_in_scope(argScopes) && (character == ',')) {
+                    args.push_back(arg);
+                    arg = "";
+                } else {
+                    arg += character;
+                }
             }
         }
 
@@ -170,7 +185,7 @@ namespace comp {
                 startIndex = index;
 
             if(c == '\n' && endIndex == -1 && startIndex != -1)
-                endIndex = index;
+                endIndex = index + 1;
 
             if(startIndex != -1 && endIndex != -1)
                 break;

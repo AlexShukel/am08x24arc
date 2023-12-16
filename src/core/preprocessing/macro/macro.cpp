@@ -1,6 +1,6 @@
 #include "macro.h"
 
-#include "preprocessing/preprocessor.h"
+#include "../preprocessor.h"
 
 namespace comp {
     Macro::Macro(const string& label, const string& body)
@@ -52,7 +52,7 @@ namespace comp {
             const auto argLabel = argsLabels[i];
             const auto value = args[i];
 
-            newBody = regex_replace(newBody, std::regex(argLabel), value);
+            newBody = Preprocessor::replace_sub_strs(newBody,argLabel,value);
         }
 
         return newBody;

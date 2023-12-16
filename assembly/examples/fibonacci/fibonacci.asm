@@ -1,17 +1,5 @@
-jmpa $MAIN
-
-@INCLUDE("assembly/std/stack.asm")
-
-@MACRO(@ADD, (),
-    add
-    swap
-    drop
-    swap
-    drop
-)
-
 @MACRO(@ROTATE_TOP, (),
-    device 1
+    device 15
 
     storeac 0xfff0
     storeac 0xfff1
@@ -29,12 +17,18 @@ $MAIN:
     $LOOP:
         dupt
         @ROTATE_TOP
-        @ADD
+        addc
 
         device 3
         dupt
         storeac 0x0000
 
-       jmpa 3
+       jmpa $LOOP
 
     halt
+
+
+
+
+
+

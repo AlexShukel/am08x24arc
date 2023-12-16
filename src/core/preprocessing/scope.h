@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-#include "common/types.h"
+#include "../common/types.h"
 
 namespace comp {
     using namespace std;

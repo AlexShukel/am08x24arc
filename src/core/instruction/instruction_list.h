@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "common/export_format.h"
+#include "../common/export_format.h"
 #include "instruction.h"
 
 namespace comp {

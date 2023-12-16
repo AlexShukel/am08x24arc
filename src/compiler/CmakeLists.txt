@@ -3,5 +3,6 @@ file(GLOB_RECURSE SRC_FILES *.cpp)
 include_directories("./")
 
 add_executable(Compiler ${SRC_FILES})
-
 set_property(TARGET Compiler PROPERTY CXX_STANDARD 23)
+
+target_link_libraries(Compiler core)

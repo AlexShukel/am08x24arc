@@ -1,0 +1,4 @@
+file(GLOB_RECURSE SRC_FILES *.cpp)
+
+add_library(core STATIC ${SRC_FILES})
+set_property(TARGET core PROPERTY CXX_STANDARD 23)

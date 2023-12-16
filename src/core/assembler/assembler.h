@@ -6,13 +6,13 @@
 #include <bitset>
 #include <unordered_map>
 
-#include "common/text_processor.h"
+#include "../common/text_processor.h"
 
-#include "instruction/instruction_list.h"
-#include "instruction/instruction_set.h"
-#include "common/number_formats.h"
-#include "tokenizer/tokenizer.h"
-#include "tokenizer/token.h"
+#include "../instruction/instruction_list.h"
+#include "../instruction/instruction_set.h"
+#include "../common/number_formats.h"
+#include "../tokenizer/tokenizer.h"
+#include "../tokenizer/token.h"
 
 namespace comp {
     using namespace std;

@@ -1,0 +1,9 @@
+file(GLOB_RECURSE SRC_FILES *.cpp)
+
+include_directories("./")
+include_directories("../core")
+
+add_executable(Preprocessor ${SRC_FILES})
+set_property(TARGET Preprocessor PROPERTY CXX_STANDARD 23)
+
+target_link_libraries(Preprocessor core)

@@ -1,9 +1,11 @@
 #pragma once
 
+#include <tuple>
 #include <vector>
+#include <set>
 
 #include "token.h"
-#include "common/text_processor.h"
+#include "../common/text_processor.h"
 
 namespace comp {
     using namespace std;

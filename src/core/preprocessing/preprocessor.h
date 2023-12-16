@@ -11,7 +11,7 @@
 
 #include "scope.h"
 
-#include "common/text_processor.h"
+#include "../common/text_processor.h"
 
 namespace comp {
     using namespace std;
@@ -25,9 +25,6 @@ namespace comp {
             vector<shared_ptr<Macro>> macros;
             vector<Scope> scopes;
 
-            static string replace_sub_str(string str, const size_t& begin, const size_t& len, const string &replacement);
-            static string replace_sub_strs(string str,const string &subStr,const string &replacement);
-
             pair<bool, Scope> is_begin_scope(const byte& ch) const;
             pair<bool, Scope> is_end_scope(const byte& ch) const;
 
@@ -40,6 +37,8 @@ namespace comp {
             string expand_macros(string text);
             pair<string, vector<string>> extract_args_from_index(const string& text, size_t index) const;
             pair<int, string> extract_arg_substring(const string& text, size_t index) const;
+
+            string open_top_scope(string text);
 
             template<class MacroType>
             void add_macro() {
@@ -55,5 +54,8 @@ namespace comp {
 
             pair<string, bool> comment_pass(string text) const;
             pair<string, bool> macro_pass(const string& text);
+
+            static string replace_sub_str(string str, const size_t& begin, const size_t& len, const string &replacement);
+            static string replace_sub_strs(string str,const string &subStr,const string &replacement);
     };
 }

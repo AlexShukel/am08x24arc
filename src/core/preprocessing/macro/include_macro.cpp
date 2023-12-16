@@ -15,8 +15,10 @@ namespace comp {
     }
 
     bool IncludeMacro::pre_comp_time_process(Preprocessor& preprocessor, vector<string>& args) {
+        string filePath;
+
         try {
-            string filePath = preprocessor.extract_arg_substring(args[0], 0).second;
+            filePath = preprocessor.extract_arg_substring(args[0], 0).second;
             string sourceCode = rread_file(filePath);
 
             auto commentResult = preprocessor.comment_pass(sourceCode);
@@ -29,7 +31,8 @@ namespace comp {
             body = sourceCode;
 
         } catch (const exception& ex) {
-            throw runtime_error("Failed to print @INCLUDE macro message, something wrong with argument");
+            cout << ex.what() << endl;
+            throw runtime_error("Failed to process @INCLUDE("+ filePath + ")macro, something wrong with argument");
         }
 
         return true;

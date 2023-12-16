@@ -5,8 +5,8 @@
 #include <sstream>
 #include <bitset>
 
-#include "instruction/instruction_list.h"
-#include "instruction/instruction_set.h"
+#include "../instruction/instruction_list.h"
+#include "../instruction/instruction_set.h"
 #include "number_formats.h"
 
 namespace comp {
