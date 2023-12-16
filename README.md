@@ -4,7 +4,7 @@
 
 ## Examples
 ### Fibonacci sequence
-Simple [program]() that counts fibonacci numbers.
+Simple program that counts fibonacci numbers.
 
 #### Links:
 1. Source code avaiable at [assembly/examples/fibonacci/fibonacci.asm](https://github.com/AlexShukel/am08x24arc/blob/main/assembly/examples/fibonacci/fibonacci.asm)
