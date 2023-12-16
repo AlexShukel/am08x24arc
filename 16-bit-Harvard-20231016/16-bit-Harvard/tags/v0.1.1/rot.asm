@@ -1,9 +1,0 @@
-        LDC 11
-        OUT  0
-        ROTR 1
-        OUT  0
-        SAR  4
-        OUT  0
-        ROTL 7
-        OUT  0
-END:    HALT
