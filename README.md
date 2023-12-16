@@ -10,7 +10,7 @@ Simple program that counts fibonacci numbers.
 1. Source code avaiable at [assembly/examples/fibonacci/fibonacci.asm](https://github.com/AlexShukel/am08x24arc/blob/main/assembly/examples/fibonacci/fibonacci.asm)
 
 ### Video player
-This example uses multiple cores, **cpu** core and one **gpu** core. Cpu is responsible for reading video data from memory, and sending it to **gpu** core, meanwhile **gpu** core recieves video data it renders evrething into the led matrix screen.
+This example uses multiple cores, **cpu** core and one **gpu** core. Cpu is responsible for reading video data from memory, and sending it to **gpu** core, meanwhile **gpu** core recieves video data it renders everything into the led matrix screen.
 
 #### Links:
 1. Program demostration [bad apple but played on homebrew stack based CPU architecture](https://youtu.be/f2nn0lIj7cs?si=6s3Qz-TR8DqL9LBK) <br>
